@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:binding/binding.dart';
+import 'package:flutter/services.dart';
 
 import 'models/app_model.dart';
 import 'pages/add_user_page.dart';
 import 'pages/home_page.dart';
 import 'pages/user_page.dart';
 
-void main() => runApp(MyApp());
+Future main() async {
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   final appModel = AppModel();

@@ -29,7 +29,7 @@ class HomePage extends StatelessWidget {
             ),
             SizedBox(),
             Text(
-              'Helping you track your children\'s eye patching time',
+              'Helping you track your child\'s eye patching time',
               style: Theme.of(context).textTheme.subhead,
             ),
             SizedBox(
