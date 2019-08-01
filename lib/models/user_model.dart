@@ -1,22 +1,26 @@
-import 'dart:convert';
+import 'dart:async';
 
 import 'package:binding/binding.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
 
 import 'patch_time_model.dart';
 
 class UserModel extends NotifyPropertyChanged {
-  final document =
-      Firestore.instance.collection('users').document('1111-1111-1111-1111');
   final totalTimePerDay = 120;
-  final formatter = new DateFormat('yyyy-MM-dd');
+
+  Timer _timer;
+  DocumentReference _userDocument;
+  Stream<DocumentSnapshot> _userDocumentSteam;
 
   // Document Keys
   final _startTimeKey = 'start-time';
   final _dataKey = 'data';
 
   // Properties
+
+  // name
+  String name;
+  String userId;
 
   // isLoading Property
   static const isLoadingPropertyName = 'isLoading';
@@ -34,22 +38,19 @@ class UserModel extends NotifyPropertyChanged {
   set timerStartTime(value) {
     _timerStartTime = value;
     propertyChanged(propertyName: timerStartTimePropertyName);
-    propertyChanged(propertyName: isTimerRunningPropertyName);
+    propertyChanged(propertyName: todayTotalTimePropertyName);
   }
 
   // data Property
-  static const dataPropertyName = 'data';
   List<PatchTimeModel> _data = List<PatchTimeModel>();
-  List<PatchTimeModel> get data => _data;
 
   // Computed Properties
 
-  static const isTimerRunningPropertyName = 'isTimerRunning';
-  bool get isTimerRunning => timerStartTime != null;
-
   PatchTimeModel get dataForToday {
     final index = _data.indexWhere((item) =>
-        formatter.format(item.date) == formatter.format(DateTime.now()));
+        item.date.year == DateTime.now().year &&
+        item.date.month == DateTime.now().month &&
+        item.date.day == DateTime.now().day);
     if (index == -1) {
       var returnValue = PatchTimeModel.fromDate(
         DateTime.now(),
@@ -62,46 +63,97 @@ class UserModel extends NotifyPropertyChanged {
     }
   }
 
-  double get todayPercentage => dataForToday.minutes / totalTimePerDay;
+  int get elapsedTime {
+    if (timerStartTime == null) return 0;
 
-  int get todayMinutesRemaining => totalTimePerDay - dataForToday.minutes;
+    final elapsedTime = DateTime.now().difference(timerStartTime).inSeconds;
+
+    if (elapsedTime < 0)
+      return 0;
+    else
+      return elapsedTime;
+  }
+
+  static const todayTotalTimePropertyName = 'todayTotalTime';
+
+  int get todayTotalTime => dataForToday.minutes + elapsedTime;
+
+  double get todayPercentage => (todayTotalTime / totalTimePerDay > 1)
+      ? 1.0
+      : todayTotalTime / totalTimePerDay;
+
+  int get todayMinutesRemaining => totalTimePerDay - todayTotalTime;
+
+  // Constructor
+
+  UserModel({this.name, this.userId}) {
+    isLoading = true;
+    _loadDocument();
+  }
 
   // Methods
 
-  void load() async {
-    isLoading = true;
-    var userDocument = await document.get();
-    if (userDocument[_startTimeKey] != null) {
-      timerStartTime =
-          DateTime.fromMillisecondsSinceEpoch(userDocument[_startTimeKey]);
+  Future<void> _loadDocument() async {
+    _userDocument = Firestore.instance.collection('users').document(userId);
+    final snapShot = await _userDocument.get();
+
+    if (snapShot == null || !snapShot.exists) {
+      // Document with id == docId doesn't exist.
+      await _userDocument.setData({_startTimeKey: null});
     }
-    if (userDocument[_dataKey] != null) {
-      for (var item in List.from(userDocument[_dataKey])) {
-        print(item);
-        _data.add(PatchTimeModel.fromJson(item));
+
+    _userDocumentSteam = _userDocument.snapshots();
+    _userDocumentSteam.listen((userDocument) {
+      if (userDocument[_dataKey] != null) {
+        _data.clear();
+        for (var item in List.from(userDocument[_dataKey])) {
+          _data.add(PatchTimeModel.fromJson(item));
+        }
       }
-    }
-    isLoading = false;
+      if (userDocument[_startTimeKey] != null) {
+        timerStartTime =
+            DateTime.fromMillisecondsSinceEpoch(userDocument[_startTimeKey]);
+        _startTicker();
+      } else {
+        timerStartTime = null;
+        _stopTicker();
+      }
+      isLoading = false;
+    });
   }
 
-  void save() async {
-    await document.updateData({
+  void _startTicker() {
+    if (_timer == null) {
+      _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+        propertyChanged(propertyName: todayTotalTimePropertyName);
+      });
+    }
+  }
+
+  void _stopTicker() {
+    if (_timer != null) {
+      _timer.cancel();
+      _timer = null;
+    }
+  }
+
+  Future<void> save() async {
+    await _userDocument.updateData({
       _startTimeKey: timerStartTime?.millisecondsSinceEpoch,
-      _dataKey: data.map((item) => item.toJson()).toList(),
+      _dataKey: _data.map((item) => item.toJson()).toList(),
     });
   }
 
   void startTimer() async {
     timerStartTime = DateTime.now();
-    save();
+    _startTicker();
+    await save();
   }
 
   void stopTimer() async {
-    final elapsedTime = DateTime.now().difference(timerStartTime).inSeconds;
-
-    dataForToday.minutes = dataForToday.minutes + elapsedTime;
-
+    dataForToday.minutes = todayTotalTime;
     timerStartTime = null;
-    save();
+    _stopTicker();
+    await save();
   }
 }

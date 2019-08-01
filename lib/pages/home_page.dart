@@ -1,74 +1,81 @@
 import 'package:binding/binding.dart';
 import 'package:flutter/material.dart';
-import 'package:percent_indicator/percent_indicator.dart';
-import '../models/user_model.dart';
+import '../models/app_model.dart';
+import 'add_user_page.dart';
+import 'user_page.dart';
 
 class HomePage extends StatelessWidget {
+  static const routeName = 'home';
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    final smallestSize = width < height ? width : height;
-    final circleRadius = smallestSize * 0.6;
-
     return Scaffold(
       body: SafeArea(
-        child: Binding<UserModel>(
-          source: BindingSource.of<UserModel>(context),
-          path: UserModel.isLoadingPropertyName,
-          builder: (_, userModel) => userModel.isLoading
-              ? Center(
-                  child: CircularProgressIndicator(),
-                )
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Binding<UserModel>(
-                      source: userModel,
-                      path: UserModel.isTimerRunningPropertyName,
-                      builder: (_, userModel) => CircularPercentIndicator(
-                        radius: circleRadius,
-                        lineWidth: 30.0,
-                        percent: userModel.todayPercentage,
-                        animation: true,
-                        center: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              '${userModel.todayMinutesRemaining} minutes',
-                              style: TextStyle(fontSize: 30),
-                            ),
-                            Text('Remaining'),
-                          ],
-                        ),
-                        progressColor: Theme.of(context).primaryColor,
-                      ),
-                    ),
-                    Center(
-                      child: Container(
-                        width: circleRadius,
-                        child: Binding<UserModel>(
-                          source: userModel,
-                          path: UserModel.timerStartTimePropertyName,
-                          builder: (_, userModel) =>
-                              userModel.timerStartTime == null
-                                  ? RaisedButton(
-                                      child: Text('Start'),
-                                      onPressed: userModel.startTimer,
-                                      color: Colors.green,
-                                    )
-                                  : RaisedButton(
-                                      child: Text('Stop'),
-                                      onPressed: userModel.stopTimer,
-                                      color: Colors.red,
+        child: Column(
+          children: <Widget>[
+            SizedBox(
+              height: 50,
+            ),
+            Center(
+              child: Container(
+                height: 200,
+                width: 200,
+                child: Image.asset('assets/images/patch-me-logo.jpg'),
+              ),
+            ),
+            Text(
+              'Patch Me',
+              style: Theme.of(context).textTheme.headline,
+            ),
+            SizedBox(),
+            Text(
+              'Helping you track your children\'s eye patching time',
+              style: Theme.of(context).textTheme.subhead,
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+              height: height - 450,
+              child: Binding<AppModel>(
+                source: BindingSource.of<AppModel>(context),
+                path: AppModel.usersPropertyName,
+                builder: (_, model) => model.users == null
+                    ? Text('loading...')
+                    : model.users.length == 0
+                        ? Text(
+                            'Add your child using the button below to start tracking.')
+                        : ListView.builder(
+                            itemCount: BindingSource.of<AppModel>(context)
+                                .users
+                                .length,
+                            itemBuilder: (_, int index) {
+                              final user = BindingSource.of<AppModel>(context)
+                                  .users[index];
+                              return InkWell(
+                                onTap: () => Navigator.pushNamed(
+                                    context, UserPage.routeName,
+                                    arguments: user),
+                                child: Card(
+                                  child: ListTile(
+                                    leading: CircleAvatar(
+                                      child: Icon(Icons.child_care),
                                     ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                                    title: Text(user.name),
+                                    trailing: Icon(Icons.arrow_forward_ios),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+              ),
+            ),
+          ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () => Navigator.of(context).pushNamed(AddUserPage.routeName),
       ),
     );
   }
