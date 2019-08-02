@@ -50,19 +50,10 @@ class _UserPageState extends State<UserPage> {
             source: _passedInModel,
             path: UserModel.timerStartTimePropertyName,
             builder: (_, userModel) {
-              if (userModel.isLoading)
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-
-              switch (_page) {
-                case 0:
-                  return TimerWidget();
-                case 1:
-                  return SettingsWidget();
-                default:
-                  return TimerWidget();
-              }
+              return AnimatedSwitcher(
+                duration: Duration(milliseconds: 500),
+                child: _widgetFromIndex(userModel),
+              );
             },
           ),
         ),
@@ -90,5 +81,21 @@ class _UserPageState extends State<UserPage> {
         ),
       ),
     );
+  }
+
+  Widget _widgetFromIndex(UserModel userModel) {
+    if (userModel.isLoading)
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+
+    switch (_page) {
+      case 0:
+        return TimerWidget();
+      case 1:
+        return SettingsWidget();
+      default:
+        return TimerWidget();
+    }
   }
 }
