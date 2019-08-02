@@ -6,11 +6,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'patch_time_model.dart';
 
 class UserModel extends NotifyPropertyChanged {
-  final totalTimePerDay = 120;
-
   Timer _timer;
   DocumentReference _userDocument;
   Stream<DocumentSnapshot> _userDocumentSteam;
+  StreamSubscription<DocumentSnapshot> _streamSubscription;
 
   // Document Keys
   final _startTimeKey = 'start-time';
@@ -21,6 +20,7 @@ class UserModel extends NotifyPropertyChanged {
   // name
   String name;
   String userId;
+  int patchTimePerDay;
 
   // isLoading Property
   static const isLoadingPropertyName = 'isLoading';
@@ -47,13 +47,17 @@ class UserModel extends NotifyPropertyChanged {
   // Computed Properties
 
   PatchTimeModel get dataForToday {
+    return _getDataForDate(DateTime.now());
+  }
+
+  PatchTimeModel _getDataForDate(DateTime date) {
     final index = _data.indexWhere((item) =>
-        item.date.year == DateTime.now().year &&
-        item.date.month == DateTime.now().month &&
-        item.date.day == DateTime.now().day);
+        item.date.year == date.year &&
+        item.date.month == date.month &&
+        item.date.day == date.day);
     if (index == -1) {
       var returnValue = PatchTimeModel.fromDate(
-        DateTime.now(),
+        date,
         0,
       );
       _data.add(returnValue);
@@ -66,7 +70,7 @@ class UserModel extends NotifyPropertyChanged {
   int get elapsedTime {
     if (timerStartTime == null) return 0;
 
-    final elapsedTime = DateTime.now().difference(timerStartTime).inSeconds;
+    final elapsedTime = DateTime.now().difference(timerStartTime).inMinutes;
 
     if (elapsedTime < 0)
       return 0;
@@ -78,20 +82,23 @@ class UserModel extends NotifyPropertyChanged {
 
   int get todayTotalTime => dataForToday.minutes + elapsedTime;
 
-  double get todayPercentage => (todayTotalTime / totalTimePerDay > 1)
+  double get todayPercentage => (todayTotalTime / patchTimePerDay > 1)
       ? 1.0
-      : todayTotalTime / totalTimePerDay;
+      : todayTotalTime / patchTimePerDay;
 
-  int get todayMinutesRemaining => totalTimePerDay - todayTotalTime;
+  int get todayMinutesRemaining => patchTimePerDay - todayTotalTime;
+
+  bool get maxTimeExceededForToday => todayTotalTime >= patchTimePerDay * 2;
 
   // Constructor
 
-  UserModel({this.name, this.userId}) {
+  UserModel({this.name, this.userId, this.patchTimePerDay});
+
+  // Methods
+  void loadUser() {
     isLoading = true;
     _loadDocument();
   }
-
-  // Methods
 
   Future<void> _loadDocument() async {
     _userDocument = Firestore.instance.collection('users').document(userId);
@@ -103,7 +110,7 @@ class UserModel extends NotifyPropertyChanged {
     }
 
     _userDocumentSteam = _userDocument.snapshots();
-    _userDocumentSteam.listen((userDocument) {
+    _streamSubscription = _userDocumentSteam.listen((userDocument) {
       if (userDocument[_dataKey] != null) {
         _data.clear();
         for (var item in List.from(userDocument[_dataKey])) {
@@ -113,7 +120,15 @@ class UserModel extends NotifyPropertyChanged {
       if (userDocument[_startTimeKey] != null) {
         timerStartTime =
             DateTime.fromMillisecondsSinceEpoch(userDocument[_startTimeKey]);
-        _startTicker();
+        if (DateTime.now().difference(timerStartTime) <
+            Duration(minutes: patchTimePerDay * 2)) {
+          _startTicker();
+        } else {
+          _getDataForDate(timerStartTime).minutes = patchTimePerDay * 2;
+          timerStartTime = null;
+          _stopTicker();
+          save();
+        }
       } else {
         timerStartTime = null;
         _stopTicker();
@@ -124,7 +139,10 @@ class UserModel extends NotifyPropertyChanged {
 
   void _startTicker() {
     if (_timer == null) {
-      _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      _timer = Timer.periodic(Duration(seconds: 10), (timer) {
+        if (maxTimeExceededForToday) {
+          stopTimer();
+        }
         propertyChanged(propertyName: todayTotalTimePropertyName);
       });
     }
@@ -155,5 +173,12 @@ class UserModel extends NotifyPropertyChanged {
     timerStartTime = null;
     _stopTicker();
     await save();
+  }
+
+  void cancelSubscription() {
+    if (_streamSubscription != null) {
+      print('cancelling subscription');
+      _streamSubscription.cancel();
+    }
   }
 }

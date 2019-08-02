@@ -51,6 +51,7 @@ class _AddUserPageState extends State<AddUserPage> {
                   initialValue: {
                     'name': 'My Child',
                     'existing_record_key': 1,
+                    'patch-time': '120'
                   },
                   child: Column(
                     children: <Widget>[
@@ -60,6 +61,17 @@ class _AddUserPageState extends State<AddUserPage> {
                         validators: [
                           FormBuilderValidators.required(),
                           FormBuilderValidators.max(15),
+                        ],
+                      ),
+                      FormBuilderTextField(
+                        keyboardType: TextInputType.number,
+                        attribute: 'patch-time',
+                        decoration: InputDecoration(
+                            labelText: 'Patch Time (minutes per day)'),
+                        validators: [
+                          FormBuilderValidators.required(),
+                          FormBuilderValidators.numeric(),
+                          FormBuilderValidators.max(300),
                         ],
                       ),
                       FormBuilderSegmentedControl(
@@ -124,6 +136,8 @@ class _AddUserPageState extends State<AddUserPage> {
                       BindingSource.of<AppModel>(context).addUser(
                         name: _fbKey.currentState.value['name'],
                         id: _fbKey.currentState.value['record-key'],
+                        patchTime:
+                            int.parse(_fbKey.currentState.value['patch-time']),
                       );
                       Navigator.of(context).pop();
                     }

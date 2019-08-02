@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'models/app_model.dart';
 import 'pages/add_user_page.dart';
 import 'pages/home_page.dart';
-import 'pages/user_page.dart';
+import 'package:patch_me/pages/user_page/user_page.dart';
 
 Future main() async {
   await SystemChrome.setPreferredOrientations([
