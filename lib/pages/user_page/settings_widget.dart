@@ -22,12 +22,13 @@ class SettingsWidget extends StatelessWidget {
             ),
           ),
           RaisedButton(
-            color: Colors.redAccent,
+            color: Colors.red[600],
+            textColor: Colors.white,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Icon(Icons.delete),
-                Text('Delete'),
+                Text('REMOVE'),
               ],
             ),
             onPressed: () async {
