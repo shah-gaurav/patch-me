@@ -21,7 +21,7 @@ class HomePage extends StatelessWidget {
                 child: Container(
                   height: 200,
                   width: 200,
-                  child: Image.asset('assets/images/patch-me-logo.jpg'),
+                  child: Image.asset('assets/images/patch-me-logo.png'),
                 ),
               ),
               Text(

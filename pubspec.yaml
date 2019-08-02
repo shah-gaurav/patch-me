@@ -37,7 +37,13 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: "^0.7.2"
 
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/patch-me-icon.png"
+  image_path_android: "assets/icon/patch-me-icon-android.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -59,7 +65,7 @@ flutter:
         - asset: assets/fonts/Caveat-Regular.ttf
 
   assets:
-    - assets/images/patch-me-logo.jpg
+    - assets/images/patch-me-logo.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
