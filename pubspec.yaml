@@ -28,10 +28,13 @@ dependencies:
   percent_indicator: ^2.1.1
   intl: ^0.15.8
   progress_indicators: ^0.1.4
-  flutter_form_builder: ^3.3.1
+  flutter_form_builder: ^3.4.1
   random_string: ^1.1.0
   shared_preferences: ^0.5.3+4
   curved_navigation_bar: ^0.3.0
+  firebase_analytics: ^5.0.0
+  firebase_crashlytics: ^0.1.0+2
+  auto_size_text: ^2.1.0
 
 
 dev_dependencies:

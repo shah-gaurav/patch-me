@@ -1,3 +1,6 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:binding/binding.dart';
 import 'package:flutter/services.dart';
@@ -8,6 +11,9 @@ import 'pages/home_page.dart';
 import 'package:patch_me/pages/user_page/user_page.dart';
 
 Future main() async {
+  // Pass all uncaught errors from the framework to Crashlytics.
+  FlutterError.onError = Crashlytics.instance.recordFlutterError;
+
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -16,6 +22,8 @@ Future main() async {
 }
 
 class MyApp extends StatelessWidget {
+  static FirebaseAnalytics analytics = FirebaseAnalytics();
+
   final appModel = AppModel();
   // This widget is the root of your application.
   @override
@@ -25,6 +33,10 @@ class MyApp extends StatelessWidget {
         instance: appModel,
         initialize: (model) => model.loadUsers(),
         child: MaterialApp(
+          navigatorObservers: [
+            FirebaseAnalyticsObserver(analytics: analytics),
+          ],
+          debugShowCheckedModeBanner: false,
           theme: ThemeData(
             buttonColor: Colors.green,
             textTheme: TextTheme(

@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:binding/binding.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -35,34 +36,48 @@ class TimerWidget extends StatelessWidget {
                 child: child,
                 scale: animation,
               ),
-              child: (userModel.todayMinutesRemaining >= 0)
-                  ? Column(
-                      key: ValueKey('underText'),
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                          Text(
-                            '${userModel.todayMinutesRemaining} minutes',
-                            style: Theme.of(context).textTheme.headline,
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 35.0),
+                child: (userModel.todayMinutesRemaining >= 0)
+                    ? Column(
+                        key: ValueKey('underText'),
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                            Center(
+                              child: AutoSizeText(
+                                '${userModel.todayMinutesRemaining} minutes',
+                                style: Theme.of(context).textTheme.headline,
+                                maxLines: 1,
+                              ),
+                            ),
+                            Center(
+                              child: AutoSizeText(
+                                'Remaining',
+                                style: Theme.of(context).textTheme.subhead,
+                              ),
+                            ),
+                          ])
+                    : Column(
+                        key: ValueKey('overText'),
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Center(
+                            child: AutoSizeText(
+                              'Over by',
+                              style: Theme.of(context).textTheme.subhead,
+                            ),
                           ),
-                          Text(
-                            'Remaining',
-                            style: Theme.of(context).textTheme.subhead,
+                          Center(
+                            child: AutoSizeText(
+                              '${userModel.todayMinutesRemaining.abs()} minutes',
+                              style: Theme.of(context).textTheme.headline,
+                              maxLines: 1,
+                            ),
                           ),
-                        ])
-                  : Column(
-                      key: ValueKey('overText'),
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          'Over by',
-                          style: Theme.of(context).textTheme.subhead,
-                        ),
-                        Text(
-                          '${userModel.todayMinutesRemaining.abs()} minutes',
-                          style: Theme.of(context).textTheme.headline,
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
+              ),
             ),
           ),
         ),

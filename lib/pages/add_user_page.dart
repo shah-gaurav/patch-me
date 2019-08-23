@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:binding/binding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -28,6 +29,7 @@ class _AddUserPageState extends State<AddUserPage> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -81,11 +83,25 @@ class _AddUserPageState extends State<AddUserPage> {
                         options: <FormBuilderFieldOption>[
                           FormBuilderFieldOption(
                             value: 1,
-                            label: 'Generate Random',
+                            child: Container(
+                              width: width - 40 / 2,
+                              height: 25,
+                              padding: EdgeInsets.symmetric(horizontal: 5.0),
+                              child: Center(
+                                child: AutoSizeText('Generae Random'),
+                              ),
+                            ),
                           ),
                           FormBuilderFieldOption(
                             value: 2,
-                            label: 'I Have a Record Key',
+                            child: Container(
+                              width: width - 40 / 2,
+                              height: 25,
+                              padding: EdgeInsets.symmetric(horizontal: 5.0),
+                              child: Center(
+                                child: AutoSizeText('I Have a Record Key'),
+                              ),
+                            ),
                           ),
                         ],
                         onChanged: (value) {
