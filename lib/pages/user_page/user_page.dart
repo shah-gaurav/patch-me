@@ -1,6 +1,7 @@
 import 'package:binding/binding.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:patch_me/models/app_model.dart';
 import '../../models/user_model.dart';
 import 'timer_widget.dart';
 import 'settings_widget.dart';
@@ -44,6 +45,18 @@ class _UserPageState extends State<UserPage> {
             _passedInModel.name,
             style: Theme.of(context).textTheme.headline,
           ),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: () async {
+                if (await _asyncConfirmDialog(context) == ConfirmAction.YES) {
+                  BindingSource.of<AppModel>(context)
+                      .removeUser(id: _passedInModel.userId);
+                  Navigator.of(context).pop();
+                }
+              },
+            )
+          ],
         ),
         body: SafeArea(
           child: Binding<UserModel>(
@@ -97,5 +110,38 @@ class _UserPageState extends State<UserPage> {
       default:
         return TimerWidget();
     }
+  }
+
+  Future<ConfirmAction> _asyncConfirmDialog(BuildContext context) async {
+    final userModel = _passedInModel;
+
+    return showDialog<ConfirmAction>(
+      context: context,
+      barrierDismissible: false, // user must tap button for close dialog!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Delete Confirmation',
+            style: Theme.of(context).textTheme.headline,
+          ),
+          content: Text(
+              'Are you sure you want to delete ${userModel.name}\'s record?'),
+          actions: <Widget>[
+            FlatButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop(ConfirmAction.NO);
+              },
+            ),
+            FlatButton(
+              child: const Text('Yes'),
+              onPressed: () {
+                Navigator.of(context).pop(ConfirmAction.YES);
+              },
+            )
+          ],
+        );
+      },
+    );
   }
 }
