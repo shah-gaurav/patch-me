@@ -17,6 +17,13 @@ class AppModel extends NotifyPropertyChanged {
     _save();
   }
 
+  void updateUser({String id, String name, int patchTime}) {
+    final user = _users.firstWhere((user) => user.userId == id);
+    user.name = name;
+    user.patchTimePerDay = patchTime;
+    _save();
+  }
+
   Future<void> _save() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setStringList(

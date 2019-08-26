@@ -41,9 +41,13 @@ class _UserPageState extends State<UserPage> {
       instance: _passedInModel,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
-            _passedInModel.name,
-            style: Theme.of(context).textTheme.headline,
+          title: Binding(
+            source: _passedInModel,
+            path: UserModel.namePropertyName,
+            builder: (_, user) => Text(
+              user.name,
+              style: Theme.of(context).textTheme.headline,
+            ),
           ),
           actions: <Widget>[
             IconButton(
@@ -72,7 +76,7 @@ class _UserPageState extends State<UserPage> {
         ),
         bottomNavigationBar: CurvedNavigationBar(
           key: _bottomNavigationKey,
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).canvasColor,
           color: Colors.blue,
           items: <Widget>[
             Icon(

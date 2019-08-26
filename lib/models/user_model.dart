@@ -18,9 +18,25 @@ class UserModel extends NotifyPropertyChanged {
   // Properties
 
   // name
-  String name;
+  static const namePropertyName = 'name';
+  String _name;
+
+  String get name => _name;
+
+  set name(String name) {
+    _name = name;
+    propertyChanged(propertyName: namePropertyName);
+  }
+
   String userId;
-  int patchTimePerDay;
+  int _patchTimePerDay;
+
+  int get patchTimePerDay => _patchTimePerDay;
+
+  set patchTimePerDay(int patchTimePerDay) {
+    _patchTimePerDay = patchTimePerDay;
+    propertyChanged(propertyName: todayTotalTimePropertyName);
+  }
 
   // isLoading Property
   static const isLoadingPropertyName = 'isLoading';
@@ -92,7 +108,10 @@ class UserModel extends NotifyPropertyChanged {
 
   // Constructor
 
-  UserModel({this.name, this.userId, this.patchTimePerDay});
+  UserModel({String name, this.userId, int patchTimePerDay}) {
+    _name = name;
+    _patchTimePerDay = patchTimePerDay;
+  }
 
   // Methods
   void loadUser() {
