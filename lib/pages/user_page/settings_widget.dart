@@ -14,6 +14,7 @@ class SettingsWidget extends StatefulWidget {
 
 class _SettingsWidgetState extends State<SettingsWidget> {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
+  var _saveEnabled = false;
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +40,11 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                   FormBuilderValidators.required(),
                   FormBuilderValidators.max(15),
                 ],
+                onChanged: (_) {
+                  setState(() {
+                    _saveEnabled = true;
+                  });
+                },
               ),
               FormBuilderTextField(
                 keyboardType: TextInputType.number,
@@ -50,6 +56,11 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                   FormBuilderValidators.numeric(),
                   FormBuilderValidators.max(300),
                 ],
+                onChanged: (_) {
+                  setState(() {
+                    _saveEnabled = true;
+                  });
+                },
               ),
               FormBuilderTextField(
                 attribute: 'record-key',
@@ -68,35 +79,39 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               ),
               RaisedButton(
                 child: Text("Save"),
-                onPressed: () {
-                  _fbKey.currentState.save();
-                  if (_fbKey.currentState.validate()) {
-                    BindingSource.of<AppModel>(context).updateUser(
-                      name: _fbKey.currentState.value['name'],
-                      id: _fbKey.currentState.value['record-key'],
-                      patchTime:
-                          int.parse(_fbKey.currentState.value['patch-time']),
-                    );
-                    Flushbar(
-                      messageText: Text(
-                        "Changes saved successfully!",
-                        style: TextStyle(fontSize: 18.0, color: Colors.white),
-                      ),
-                      icon: Icon(
-                        Icons.info_outline,
-                        size: 28.0,
-                        color: Colors.green,
-                      ),
-                      duration: Duration(seconds: 5),
-                      leftBarIndicatorColor: Colors.green,
-                    )..show(context);
-                  }
-                },
+                onPressed: !_saveEnabled ? null : () => _save(context),
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  void _save(BuildContext context) {
+    _fbKey.currentState.save();
+    if (_fbKey.currentState.validate()) {
+      BindingSource.of<AppModel>(context).updateUser(
+        name: _fbKey.currentState.value['name'],
+        id: _fbKey.currentState.value['record-key'],
+        patchTime: int.parse(_fbKey.currentState.value['patch-time']),
+      );
+      Flushbar(
+        messageText: Text(
+          "Changes saved successfully!",
+          style: TextStyle(fontSize: 18.0, color: Colors.white),
+        ),
+        icon: Icon(
+          Icons.info_outline,
+          size: 28.0,
+          color: Colors.green,
+        ),
+        duration: Duration(seconds: 5),
+        leftBarIndicatorColor: Colors.green,
+      )..show(context);
+      setState(() {
+        _saveEnabled = false;
+      });
+    }
   }
 }
