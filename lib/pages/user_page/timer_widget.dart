@@ -15,7 +15,7 @@ class TimerWidget extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
     final smallestSize = width < height ? width : height;
 
-    final circleRadius = smallestSize * 0.6;
+    final circleRadius = smallestSize > 500.0 ? 400.0 : smallestSize * 0.6;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,

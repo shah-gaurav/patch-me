@@ -35,39 +35,43 @@ class HomePage extends StatelessWidget {
                 height: 20,
               ),
               Expanded(
-                child: Binding<AppModel>(
-                  source: BindingSource.of<AppModel>(context),
-                  path: AppModel.usersPropertyName,
-                  builder: (_, model) => model.users == null
-                      ? Text('loading...')
-                      : model.users.length == 0
-                          ? Text(
-                              'Add your child using the button below to start tracking.',
-                              textAlign: TextAlign.center,
-                            )
-                          : ListView.builder(
-                              itemCount: BindingSource.of<AppModel>(context)
-                                  .users
-                                  .length,
-                              itemBuilder: (_, int index) {
-                                final user = BindingSource.of<AppModel>(context)
-                                    .users[index];
-                                return InkWell(
-                                  onTap: () => Navigator.pushNamed(
-                                      context, UserPage.routeName,
-                                      arguments: user),
-                                  child: Card(
-                                    child: ListTile(
-                                      leading: CircleAvatar(
-                                        child: Icon(Icons.child_care),
+                child: Container(
+                  constraints: BoxConstraints(maxWidth: 500),
+                  child: Binding<AppModel>(
+                    source: BindingSource.of<AppModel>(context),
+                    path: AppModel.usersPropertyName,
+                    builder: (_, model) => model.users == null
+                        ? Text('loading...')
+                        : model.users.length == 0
+                            ? Text(
+                                'Add your child using the button below to start tracking.',
+                                textAlign: TextAlign.center,
+                              )
+                            : ListView.builder(
+                                itemCount: BindingSource.of<AppModel>(context)
+                                    .users
+                                    .length,
+                                itemBuilder: (_, int index) {
+                                  final user =
+                                      BindingSource.of<AppModel>(context)
+                                          .users[index];
+                                  return InkWell(
+                                    onTap: () => Navigator.pushNamed(
+                                        context, UserPage.routeName,
+                                        arguments: user),
+                                    child: Card(
+                                      child: ListTile(
+                                        leading: CircleAvatar(
+                                          child: Icon(Icons.child_care),
+                                        ),
+                                        title: Text(user.name),
+                                        trailing: Icon(Icons.arrow_forward_ios),
                                       ),
-                                      title: Text(user.name),
-                                      trailing: Icon(Icons.arrow_forward_ios),
                                     ),
-                                  ),
-                                );
-                              },
-                            ),
+                                  );
+                                },
+                              ),
+                  ),
                 ),
               ),
             ],

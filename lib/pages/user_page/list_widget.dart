@@ -16,31 +16,34 @@ class _ListWidgetState extends State<ListWidget> {
   @override
   Widget build(BuildContext context) {
     final userModel = BindingSource.of<UserModel>(context);
-    return Container(
-      padding: EdgeInsets.all(16.0),
-      child: ListView.builder(
-        itemCount: userModel.data.length,
-        itemBuilder: (_, index) => Card(
-          child: ListTile(
-            leading: CircleAvatar(
-              backgroundColor: _getBackgroundColor(userModel.data[index]),
-              child: Text(
-                userModel.data[index].minutes.toString(),
-                style: TextStyle(
-                  color: Colors.white,
+    return Center(
+      child: Container(
+        padding: EdgeInsets.all(16.0),
+        constraints: BoxConstraints(maxWidth: 500),
+        child: ListView.builder(
+          itemCount: userModel.data.length,
+          itemBuilder: (_, index) => Card(
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundColor: _getBackgroundColor(userModel.data[index]),
+                child: Text(
+                  userModel.data[index].minutes.toString(),
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
                 ),
               ),
-            ),
-            title: Text(
-              DateFormat.yMMMMEEEEd().format(userModel.data[index].date),
-              style: Theme.of(context).textTheme.body1,
-            ),
-            trailing: IconButton(
-              color: Theme.of(context).primaryColor,
-              icon: Icon(Icons.edit),
-              onPressed: () {
-                _showModalDialog(context, userModel.data[index]);
-              },
+              title: Text(
+                DateFormat.yMMMMEEEEd().format(userModel.data[index].date),
+                style: Theme.of(context).textTheme.body1,
+              ),
+              trailing: IconButton(
+                color: Theme.of(context).primaryColor,
+                icon: Icon(Icons.edit),
+                onPressed: () {
+                  _showModalDialog(context, userModel.data[index]);
+                },
+              ),
             ),
           ),
         ),

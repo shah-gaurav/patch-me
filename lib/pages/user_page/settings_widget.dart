@@ -22,66 +22,72 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: FormBuilder(
-          // context,
-          key: _fbKey,
-          autovalidate: true,
-          initialValue: {
-            'name': userModel.name,
-            'patch-time': userModel.patchTimePerDay.toString(),
-            'record-key': userModel.userId
-          },
-          child: Column(
-            children: <Widget>[
-              FormBuilderTextField(
-                attribute: 'name',
-                decoration: InputDecoration(labelText: 'Name'),
-                validators: [
-                  FormBuilderValidators.required(),
-                  FormBuilderValidators.max(15),
+        child: Center(
+          child: Container(
+            constraints: BoxConstraints(maxWidth: 500),
+            child: FormBuilder(
+              // context,
+              key: _fbKey,
+              autovalidate: true,
+              initialValue: {
+                'name': userModel.name,
+                'patch-time': userModel.patchTimePerDay.toString(),
+                'record-key': userModel.userId
+              },
+              child: Column(
+                children: <Widget>[
+                  FormBuilderTextField(
+                    attribute: 'name',
+                    decoration: InputDecoration(labelText: 'Name'),
+                    validators: [
+                      FormBuilderValidators.required(),
+                      FormBuilderValidators.max(15),
+                    ],
+                    onChanged: (_) {
+                      setState(() {
+                        _saveEnabled = true;
+                      });
+                    },
+                  ),
+                  FormBuilderTextField(
+                    keyboardType: TextInputType.number,
+                    attribute: 'patch-time',
+                    decoration: InputDecoration(
+                        labelText: 'Patch Time (minutes per day)'),
+                    validators: [
+                      FormBuilderValidators.required(),
+                      FormBuilderValidators.numeric(),
+                      FormBuilderValidators.max(300),
+                    ],
+                    onChanged: (_) {
+                      setState(() {
+                        _saveEnabled = true;
+                      });
+                    },
+                  ),
+                  FormBuilderTextField(
+                    attribute: 'record-key',
+                    keyboardType: TextInputType.number,
+                    readOnly: true,
+                    decoration: InputDecoration(labelText: 'Record Key'),
+                    validators: [
+                      FormBuilderValidators.required(),
+                      FormBuilderValidators.max(15),
+                      FormBuilderValidators.min(15),
+                      FormBuilderValidators.pattern(
+                          '\\d{4}-\\d{4}-\\d{4}-\\d{4}'),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  RaisedButton(
+                    child: Text("Save"),
+                    onPressed: !_saveEnabled ? null : () => _save(context),
+                  ),
                 ],
-                onChanged: (_) {
-                  setState(() {
-                    _saveEnabled = true;
-                  });
-                },
               ),
-              FormBuilderTextField(
-                keyboardType: TextInputType.number,
-                attribute: 'patch-time',
-                decoration:
-                    InputDecoration(labelText: 'Patch Time (minutes per day)'),
-                validators: [
-                  FormBuilderValidators.required(),
-                  FormBuilderValidators.numeric(),
-                  FormBuilderValidators.max(300),
-                ],
-                onChanged: (_) {
-                  setState(() {
-                    _saveEnabled = true;
-                  });
-                },
-              ),
-              FormBuilderTextField(
-                attribute: 'record-key',
-                keyboardType: TextInputType.number,
-                readOnly: true,
-                decoration: InputDecoration(labelText: 'Record Key'),
-                validators: [
-                  FormBuilderValidators.required(),
-                  FormBuilderValidators.max(15),
-                  FormBuilderValidators.min(15),
-                  FormBuilderValidators.pattern('\\d{4}-\\d{4}-\\d{4}-\\d{4}'),
-                ],
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              RaisedButton(
-                child: Text("Save"),
-                onPressed: !_saveEnabled ? null : () => _save(context),
-              ),
-            ],
+            ),
           ),
         ),
       ),
