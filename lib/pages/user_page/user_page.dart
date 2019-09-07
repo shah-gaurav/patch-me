@@ -1,6 +1,7 @@
 import 'package:binding/binding.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:share/share.dart';
 import '../../models/app_model.dart';
 import '../../models/user_model.dart';
 import 'list_widget.dart';
@@ -51,6 +52,13 @@ class _UserPageState extends State<UserPage> {
             ),
           ),
           actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.share),
+              onPressed: () async {
+                Share.share(
+                    'Patch Me App (https://patchme.app) record key: ${_passedInModel.userId}.');
+              },
+            ),
             IconButton(
               icon: Icon(Icons.delete),
               onPressed: () async {
