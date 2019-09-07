@@ -4,7 +4,7 @@ Patch Me is an open source free app that allows parents to track the eye patchin
 
 **Dedicated to my beautiful and strong daugher Aamani**
 
-![Aamani's picture](https://github.com/shah-gaurav/patch-me/blob/master/images/aamani.jpg)
+![Aamani's picture](https://github.com/shah-gaurav/patch-me/raw/master/images/Aamani.jpg)
 
 ## Privacy Policy
 
