@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:binding/binding.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import '../../models/user_model.dart';
@@ -20,6 +21,12 @@ class TimerWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
+        Center(
+          child: Text(
+            DateFormat.yMMMMEEEEd().format(DateTime.now()),
+            style: Theme.of(context).textTheme.title,
+          ),
+        ),
         Binding<UserModel>(
           source: BindingSource.of<UserModel>(context),
           path: UserModel.todayTotalTimePropertyName,

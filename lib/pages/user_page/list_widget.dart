@@ -33,6 +33,7 @@ class _ListWidgetState extends State<ListWidget> {
             ),
             title: Text(
               DateFormat.yMMMMEEEEd().format(userModel.data[index].date),
+              style: Theme.of(context).textTheme.body1,
             ),
             trailing: IconButton(
               color: Theme.of(context).primaryColor,

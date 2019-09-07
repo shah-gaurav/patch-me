@@ -44,13 +44,17 @@ class MyApp extends StatelessWidget {
                   fontFamily: 'pacifico',
                   fontSize: 30,
                 ),
+                title: TextStyle(
+                  fontFamily: 'caveat',
+                  fontSize: 26,
+                ),
                 subhead: TextStyle(
                   fontFamily: 'caveat',
-                  fontSize: 22,
+                  fontSize: 24,
                 ),
                 body1: TextStyle(
                   fontFamily: 'caveat',
-                  fontSize: 20,
+                  fontSize: 22,
                 ),
                 button: TextStyle(
                   fontFamily: 'pacifico',
