@@ -36,6 +36,7 @@ dependencies:
   firebase_crashlytics: ^0.1.0+2
   auto_size_text: ^2.1.0
   flushbar: ^1.8.2
+  rflutter_alert: ^1.0.3
 
 
 dev_dependencies:

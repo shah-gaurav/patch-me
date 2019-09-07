@@ -60,6 +60,11 @@ class UserModel extends NotifyPropertyChanged {
   // data Property
   List<PatchTimeModel> _data = List<PatchTimeModel>();
 
+  List<PatchTimeModel> get data {
+    _data.sort((a, b) => b.date.compareTo(a.date));
+    return _data;
+  }
+
   // Computed Properties
 
   PatchTimeModel get dataForToday {
@@ -72,10 +77,7 @@ class UserModel extends NotifyPropertyChanged {
         item.date.month == date.month &&
         item.date.day == date.day);
     if (index == -1) {
-      var returnValue = PatchTimeModel.fromDate(
-        date,
-        0,
-      );
+      var returnValue = PatchTimeModel.fromDate(date, 0, patchTimePerDay);
       _data.add(returnValue);
       return returnValue;
     } else {
@@ -199,5 +201,10 @@ class UserModel extends NotifyPropertyChanged {
       print('cancelling subscription');
       _streamSubscription.cancel();
     }
+  }
+
+  updatePatchTime({DateTime date, int patchTime}) async {
+    _data.firstWhere((e) => e.date == date).minutes = patchTime;
+    await save();
   }
 }

@@ -1,8 +1,9 @@
 import 'package:binding/binding.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:patch_me/models/app_model.dart';
+import '../../models/app_model.dart';
 import '../../models/user_model.dart';
+import 'list_widget.dart';
 import 'timer_widget.dart';
 import 'settings_widget.dart';
 
@@ -85,6 +86,11 @@ class _UserPageState extends State<UserPage> {
               color: Colors.white,
             ),
             Icon(
+              Icons.view_list,
+              size: 30,
+              color: Colors.white,
+            ),
+            Icon(
               Icons.settings,
               size: 30,
               color: Colors.white,
@@ -110,6 +116,8 @@ class _UserPageState extends State<UserPage> {
       case 0:
         return TimerWidget();
       case 1:
+        return ListWidget();
+      case 2:
         return SettingsWidget();
       default:
         return TimerWidget();
