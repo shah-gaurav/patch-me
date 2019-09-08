@@ -74,3 +74,6 @@
 # Firebase
 google-services.json
 GoogleService-Info.plist
+
+# Android
+key.properties
