@@ -1,19 +1,19 @@
 <template>
   <v-app>
     <v-app-bar app>
-      <v-toolbar-title class="logo">
-        <span>Patch Me</span>
-      </v-toolbar-title>
+       <v-toolbar-title class="logo">
+          <span>Patch Me</span>
+        </v-toolbar-title>     
       <v-spacer></v-spacer>
       <v-toolbar-items class="d-none d-sm-flex">
-        <!-- <v-btn
-          text
-          href="https://github.com/shah-gaurav/patch-me/blob/master/PRIVACY.md"
-          target="_blank"
-        >
+        <v-btn text to="/">
+          <v-icon>mdi-home</v-icon>&nbsp;
+          <span class="mr-2">Home</span>
+        </v-btn>
+        <v-btn text to="/report">
           <v-icon>mdi-file-document-box</v-icon>&nbsp;
           <span class="mr-2">Report</span>
-        </v-btn> -->
+        </v-btn>
         <v-btn text href="https://github.com/shah-gaurav/patch-me" target="_blank">
           <v-icon>mdi-github-circle</v-icon>&nbsp;
           <span class="mr-2">Souce Code</span>
@@ -27,18 +27,22 @@
         </template>
 
         <v-list>
-          <!-- <v-list-item>
+          <v-list-item>
             <v-list-item-title>
-              <v-btn
-                text
-                href="https://github.com/shah-gaurav/patch-me/blob/master/PRIVACY.md"
-                target="_blank"
-              >
+              <v-btn text to="/">
+                <v-icon>mdi-home</v-icon>&nbsp;
+                <span class="mr-2">Home</span>
+              </v-btn>
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-title>
+              <v-btn text to="/report">
                 <v-icon>mdi-file-document-box</v-icon>&nbsp;
                 <span class="mr-2">Report</span>
               </v-btn>
             </v-list-item-title>
-          </v-list-item> -->
+          </v-list-item>
           <v-list-item>
             <v-list-item-title>
               <v-btn text href="https://github.com/shah-gaurav/patch-me" target="_blank">
@@ -52,7 +56,7 @@
     </v-app-bar>
 
     <v-content>
-      <HelloWorld />
+      <router-view />
     </v-content>
 
     <v-footer>
@@ -72,20 +76,6 @@
     </v-footer>
   </v-app>
 </template>
-
-<script>
-import HelloWorld from './components/HelloWorld';
-
-export default {
-  name: 'App',
-  components: {
-    HelloWorld,
-  },
-  data: () => ({
-    //
-  }),
-};
-</script>
 
 <style>
 @import url("https://fonts.googleapis.com/css?family=Pacifico&display=swap");
