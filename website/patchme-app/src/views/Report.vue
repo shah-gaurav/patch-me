@@ -26,8 +26,8 @@
 </template>
 
 <script>
-import { db } from '../scripts/db'
-/* db.collection('users')
+/*import { db } from '../scripts/db'
+ db.collection('users')
   .doc('4415-3824-7818-2370')
   .get()
   .then(snapshot => {

@@ -2,6 +2,8 @@
 
 Patch Me is an **open source free app** that allows parents to track the eye patching time for their children. 
 
+Download the app from [Patch Me Website](https://patchme.app)
+
 ![Aamani's picture](https://github.com/shah-gaurav/patch-me/raw/master/images/Aamani.jpg)
 
 **Dedicated to my strong and beautiful daughter Aamani**

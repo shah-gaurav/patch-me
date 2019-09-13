@@ -10,10 +10,10 @@
           <v-icon>mdi-home</v-icon>&nbsp;
           <span class="mr-2">Home</span>
         </v-btn>
-        <v-btn text to="/report">
+        <!-- <v-btn text to="/report">
           <v-icon>mdi-file-document-box</v-icon>&nbsp;
           <span class="mr-2">Report</span>
-        </v-btn>
+        </v-btn> -->
         <v-btn text href="https://github.com/shah-gaurav/patch-me" target="_blank">
           <v-icon>mdi-github-circle</v-icon>&nbsp;
           <span class="mr-2">Souce Code</span>
@@ -35,14 +35,14 @@
               </v-btn>
             </v-list-item-title>
           </v-list-item>
-          <v-list-item>
+          <!-- <v-list-item>
             <v-list-item-title>
               <v-btn text to="/report">
                 <v-icon>mdi-file-document-box</v-icon>&nbsp;
                 <span class="mr-2">Report</span>
               </v-btn>
             </v-list-item-title>
-          </v-list-item>
+          </v-list-item> -->
           <v-list-item>
             <v-list-item-title>
               <v-btn text href="https://github.com/shah-gaurav/patch-me" target="_blank">
