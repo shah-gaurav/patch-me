@@ -74,6 +74,7 @@
 # Firebase
 google-services.json
 GoogleService-Info.plist
+firebase_constants.dart
 
 # Android
 key.properties

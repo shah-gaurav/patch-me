@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:binding/binding.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:patch_me/models/firebase_constants.dart';
 
 import 'patch_time_model.dart';
 
@@ -10,6 +12,7 @@ class UserModel extends NotifyPropertyChanged {
   DocumentReference _userDocument;
   Stream<DocumentSnapshot> _userDocumentSteam;
   StreamSubscription<DocumentSnapshot> _streamSubscription;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // Document Keys
   final _startTimeKey = 'start-time';
@@ -122,6 +125,10 @@ class UserModel extends NotifyPropertyChanged {
   }
 
   Future<void> _loadDocument() async {
+    await _auth.signInWithEmailAndPassword(
+      email: FirebaseConstants.email,
+      password: FirebaseConstants.password,
+    );
     _userDocument = Firestore.instance.collection('users').document(userId);
     final snapShot = await _userDocument.get();
 
@@ -201,6 +208,7 @@ class UserModel extends NotifyPropertyChanged {
       print('cancelling subscription');
       _streamSubscription.cancel();
     }
+    _auth.signOut();
   }
 
   updatePatchTime({DateTime date, int patchTime}) async {
