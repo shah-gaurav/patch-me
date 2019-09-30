@@ -131,7 +131,8 @@ class _AddUserPageState extends State<AddUserPage> {
                           FormBuilderTextField(
                             controller: recordKeyTextEditingController,
                             attribute: 'record-key',
-                            keyboardType: TextInputType.number,
+                            keyboardType:
+                                TextInputType.numberWithOptions(signed: true),
                             readOnly: recordKeyReadOnly,
                             decoration:
                                 InputDecoration(labelText: 'Record Key'),

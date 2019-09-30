@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:binding/binding.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -46,6 +48,9 @@ class _UserPageState extends State<UserPage> {
   _initialize() async {
     _passedInModel = ModalRoute.of(context).settings.arguments;
     await _passedInModel.loadUser();
+    if (Platform.isIOS) {
+      _fcm.requestNotificationPermissions(IosNotificationSettings());
+    }
     // Get the token for this device
     String fcmToken = await _fcm.getToken();
     await _passedInModel.addDeviceToken(fcmToken);
