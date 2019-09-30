@@ -15,8 +15,11 @@ class UserModel extends NotifyPropertyChanged {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // Document Keys
+  final _timerRunningKey = 'timer-running';
   final _startTimeKey = 'start-time';
+  final _timeRemainingKey = 'time-remaining';
   final _dataKey = 'data';
+  final _deviceTokensKey = 'tokens';
 
   // Properties
 
@@ -67,6 +70,9 @@ class UserModel extends NotifyPropertyChanged {
     _data.sort((a, b) => b.date.compareTo(a.date));
     return _data;
   }
+
+  // device tokens Property
+  List<String> _deviceTokens = List<String>();
 
   // Computed Properties
 
@@ -119,9 +125,9 @@ class UserModel extends NotifyPropertyChanged {
   }
 
   // Methods
-  void loadUser() {
+  Future<void> loadUser() async {
     isLoading = true;
-    _loadDocument();
+    await _loadDocument();
   }
 
   Future<void> _loadDocument() async {
@@ -135,34 +141,47 @@ class UserModel extends NotifyPropertyChanged {
     if (snapShot == null || !snapShot.exists) {
       // Document with id == docId doesn't exist.
       await _userDocument.setData({_startTimeKey: null});
+    } else {
+      _loadUser(snapShot.data);
     }
 
     _userDocumentSteam = _userDocument.snapshots();
     _streamSubscription = _userDocumentSteam.listen((userDocument) {
-      if (userDocument[_dataKey] != null) {
-        _data.clear();
-        for (var item in List.from(userDocument[_dataKey])) {
-          _data.add(PatchTimeModel.fromJson(item));
-        }
+      _loadUser(userDocument);
+    });
+
+    isLoading = false;
+  }
+
+  _loadUser(userDocument) {
+    if (userDocument[_dataKey] != null) {
+      _data.clear();
+      for (var item in List.from(userDocument[_dataKey])) {
+        _data.add(PatchTimeModel.fromJson(item));
       }
-      if (userDocument[_startTimeKey] != null) {
-        timerStartTime =
-            DateTime.fromMillisecondsSinceEpoch(userDocument[_startTimeKey]);
-        if (DateTime.now().difference(timerStartTime) <
-            Duration(minutes: patchTimePerDay * 2)) {
-          _startTicker();
-        } else {
-          _getDataForDate(timerStartTime).minutes = patchTimePerDay * 2;
-          timerStartTime = null;
-          _stopTicker();
-          save();
-        }
+    }
+    if (userDocument[_startTimeKey] != null) {
+      timerStartTime =
+          DateTime.fromMillisecondsSinceEpoch(userDocument[_startTimeKey]);
+      if (DateTime.now().difference(timerStartTime) <
+          Duration(minutes: patchTimePerDay * 2)) {
+        _startTicker();
       } else {
+        _getDataForDate(timerStartTime).minutes = patchTimePerDay * 2;
         timerStartTime = null;
         _stopTicker();
+        save();
       }
-      isLoading = false;
-    });
+    } else {
+      timerStartTime = null;
+      _stopTicker();
+    }
+    if (userDocument[_deviceTokensKey] != null) {
+      _deviceTokens.clear();
+      for (var item in List.from(userDocument[_deviceTokensKey])) {
+        _deviceTokens.add(item);
+      }
+    }
   }
 
   void _startTicker() {
@@ -185,7 +204,10 @@ class UserModel extends NotifyPropertyChanged {
 
   Future<void> save() async {
     await _userDocument.updateData({
+      _timerRunningKey: timerStartTime == null ? false : true,
       _startTimeKey: timerStartTime?.millisecondsSinceEpoch,
+      _timeRemainingKey: patchTimePerDay - dataForToday.minutes,
+      _deviceTokensKey: _deviceTokens,
       _dataKey: _data.map((item) => item.toJson()).toList(),
     });
   }
@@ -213,6 +235,18 @@ class UserModel extends NotifyPropertyChanged {
 
   updatePatchTime({DateTime date, int patchTime}) async {
     _data.firstWhere((e) => e.date == date).minutes = patchTime;
+    await save();
+  }
+
+  Future<void> addDeviceToken(String token) async {
+    if (!_deviceTokens.contains(token)) {
+      _deviceTokens.add(token);
+      await save();
+    }
+  }
+
+  Future<void> removeAllDeviceTokens() async {
+    _deviceTokens.clear();
     await save();
   }
 }

@@ -39,6 +39,7 @@ dependencies:
   rflutter_alert: ^1.0.3
   share: ^0.6.2+1
   firebase_auth: ^0.14.0+5
+  firebase_messaging: ^5.1.6
 
 
 dev_dependencies:

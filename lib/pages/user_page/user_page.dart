@@ -1,5 +1,6 @@
 import 'package:binding/binding.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
 import '../../models/app_model.dart';
@@ -20,6 +21,13 @@ class _UserPageState extends State<UserPage> {
   GlobalKey _bottomNavigationKey = GlobalKey();
   UserModel _passedInModel;
   bool _initialized = false;
+  final FirebaseMessaging _fcm = FirebaseMessaging();
+
+  @override
+  void initState() {
+    _fcm.configure();
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -31,10 +39,17 @@ class _UserPageState extends State<UserPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (!_initialized) {
-      _passedInModel = ModalRoute.of(context).settings.arguments;
-      _passedInModel.loadUser();
-      _initialized = true;
+      _initialize();
     }
+  }
+
+  _initialize() async {
+    _passedInModel = ModalRoute.of(context).settings.arguments;
+    await _passedInModel.loadUser();
+    // Get the token for this device
+    String fcmToken = await _fcm.getToken();
+    await _passedInModel.addDeviceToken(fcmToken);
+    _initialized = true;
   }
 
   @override
@@ -63,6 +78,7 @@ class _UserPageState extends State<UserPage> {
               icon: Icon(Icons.delete),
               onPressed: () async {
                 if (await _asyncConfirmDialog(context) == ConfirmAction.YES) {
+                  await _passedInModel.removeAllDeviceTokens();
                   BindingSource.of<AppModel>(context)
                       .removeUser(id: _passedInModel.userId);
                   Navigator.of(context).pop();
