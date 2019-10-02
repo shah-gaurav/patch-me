@@ -8,3 +8,7 @@ $font-size-root: 18px;
 
 $body-font-family: 'Caveat', cursive;
 
+// Any component modifications must be imported
+@import '~vuetify/src/components/VCalendar/_variables.scss';
+
+$calendar-event-font-size: 16px;
