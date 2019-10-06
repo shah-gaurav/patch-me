@@ -29,7 +29,7 @@ export const sendNotifications = functions.https.onRequest(async (request, respo
                         if (lastNotificationSent !== undefined) {
                             const dateLastNotificationSent = lastNotificationSent.toDate();
                             const timeSinceLastNotification = getMinutesBetweenDates(dateLastNotificationSent, new Date());
-                            if(timeSinceLastNotification < 4 * 60) {
+                            if (timeSinceLastNotification < 4 * 60) {
                                 console.log(`It has only been ${timeSinceLastNotification} minutes since last notification. Not sending another notification.`)
                                 sendNotification = false;
                             }
@@ -41,28 +41,32 @@ export const sendNotifications = functions.https.onRequest(async (request, respo
             }
 
             if (sendNotification) {
-                console.log(`${doc.id} has ${difference} minutes remaining. Sending notification.`)
-                // Notification details.
-                const payload = {
-                    notification: {
-                        title: 'Patching almost complete',
-                        body: `Less than ${difference} minutes remaining.`
-                    }
-                };
-
                 // Listing all tokens as an array.
                 const tokens = data['tokens'];
-                console.log(tokens);
-                // Send notifications to all tokens.
-                try {
-                    const fcmResponse = await admin.messaging().sendToDevice(tokens, payload);
-                    console.log(`Successfully sent notification: ${fcmResponse}`);
+                console.log(`${doc.id} has tokens: ${tokens}`);
 
-                    await db.collection("notifications").doc(doc.id)
-                        .set({ 'last-notification-sent': admin.firestore.FieldValue.serverTimestamp() });
-                }
-                catch (error) {
-                    console.log(`Error sending notification: ${error}`);
+                if (tokens != null && tokens.length != 0) {
+
+                    console.log(`${doc.id} has ${difference} minutes remaining. Sending notification.`)
+                    // Notification details.
+                    const payload = {
+                        notification: {
+                            title: 'Patching almost complete',
+                            body: `Less than ${difference} minutes remaining.`
+                        }
+                    };
+
+                    // Send notifications to all tokens.
+                    try {
+                        const fcmResponse = await admin.messaging().sendToDevice(tokens, payload);
+                        console.log(`Successfully sent notification: ${fcmResponse}`);
+
+                        await db.collection("notifications").doc(doc.id)
+                            .set({ 'last-notification-sent': admin.firestore.FieldValue.serverTimestamp() });
+                    }
+                    catch (error) {
+                        console.log(`Error sending notification: ${error}`);
+                    }
                 }
             }
         }
