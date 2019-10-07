@@ -8,11 +8,6 @@
         <p
           class="font-weight-regular body-1"
         >Patch Me is an Open Source FREE App that allows parents to track the eye patching time for their children</p>
-        <p class="font-weight-bold body-1">Dedicated to my brave and beautiful daughter Aamani</p>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col class="text-center">
         <a
           href="https://play.google.com/store/apps/details?id=com.edocllc.patch_me&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"
         >
@@ -26,6 +21,12 @@
           href="https://apps.apple.com/us/app/patch-me-eye-patch-tracking/id1479306625?mt=8"
           style="margin:10px;display:inline-block;overflow:hidden;background:url(https://linkmaker.itunes.apple.com/en-us/badge-lrg.svg?releaseDate=2019-09-11&kind=iossoftware&bubble=ios_apps) no-repeat;width:135px;height:40px;"
         ></a>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col class="text-center">
+        <p class="font-weight-bold body-1">Dedicated to my brave and beautiful daughter Aamani</p>
+        <v-img :src="require('../assets/Aamani.jpg')" class="my-3" contain height="400"></v-img>
       </v-col>
     </v-row>
   </v-container>

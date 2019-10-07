@@ -22,32 +22,26 @@
         </v-flex>
       </v-layout>
     </v-form>
-    <v-layout v-if="records">
-      <v-flex class="text-md-center pt-9" xs12 md6 offset-md3>
-        <v-btn class="mr-4" color="primary" @click="$refs.calendar.prev()">
-          <v-icon dark>mdi-chevron-left</v-icon>Previous
-        </v-btn>
-        <span class="title font-weight-bold">{{ month }}</span>
-        <v-btn class="ml-4" color="primary" @click="$refs.calendar.next()">
-          Next
-          <v-icon dark>mdi-chevron-right</v-icon>
-        </v-btn>
+    <v-layout v-if="records">    
+      <v-flex class="text-md-center pt-9" xs12 md8 offset-md2>
+        <h1 class="title font-weight-bold">Patching Report for Last 30 days</h1>  
+        <pure-vue-chart
+          :points="points"
+          :width="800"
+          :height="200"
+          :show-y-axis="true"
+          :show-x-axis="true"
+          :show-values="true"
+          :show-trend-line="true"
+          :trend-line-width="2"
+          trend-line-color="lightblue"
+        />
       </v-flex>
     </v-layout>
-    <v-layout v-if="records">
+    <v-layout v-if="records">    
       <v-flex class="text-md-center pt-9" xs12 md8 offset-md2>
-        <v-responsive :aspect-ratio="16/9">
-          <v-calendar
-            ref="calendar"
-            v-model="start"
-            type="month"
-            :events="events"
-            start="2019-09-01"
-            :event-color="getEventColor"
-            :event-margin-bottom="10">
-            
-          </v-calendar>
-        </v-responsive>
+        <h2 class="title">Average Minutes Patched per Day (Only on Days Patched): {{averageTimePatchedPerDay}}</h2> 
+        <h2 class="title">Average Minutes Patched per Day (All 30 days): {{averageTimePatchedPerDayOver30Days}}</h2>         
       </v-flex>
     </v-layout>
   </v-container>
@@ -56,22 +50,20 @@
 <script>
 import { db } from '../scripts/db'
 import moment from 'moment';
+import PureVueChart from 'pure-vue-chart';
 
 export default {
-  created() {
-    this.start = moment().format('YYYY-MM-DD');
+  components: {
+    PureVueChart,
   },
   data() {
     return {
-      recordKey: '',
+      recordKey: '8430-1313-6812-0105',
+      points: [],
+      numberOfDaysPatched: 0,
+      averageTimePatchedPerDay: undefined,
+      averageTimePatchedPerDayOver30Days: undefined,
       records: undefined,
-      events: undefined,
-      start: undefined,
-    }
-  },
-  computed: {
-    month() {
-      return moment(this.start).format('MMMM YYYY');
     }
   },
   methods: {
@@ -81,24 +73,27 @@ export default {
         .get();
       if (documentSnapshot.exists) {
         var document = documentSnapshot.data();
-        this.records = document.data;
-        this.events = this.records.map(function (item) {
-          var percentage = item['minutes'] / item['target-minutes'];
-          var color = 'green';
-          if (percentage < 0.5)
-            color = 'red';
-          else if (percentage >= 0.5 && percentage < 0.75)
-            color = 'yellow';
-
-          return { 'name': `${item['minutes']} minutes`, 'start': moment(item['date'], 'MM/DD/YYYY').format('YYYY-MM-DD'), 'color': color };
-        });
+        this.records = document.data;        
+        this.points.length = 0;
+        this.numberOfDaysPatched = 0;
+        var totalPatchTime = 0;
+         for(var i = 30; i > 0; i--){
+          var date = moment().subtract(i, 'days').format('M/D/YYYY');
+          var record = this.records.find(v => v['date'] === date);
+          if(record) {
+            totalPatchTime += record['minutes'];
+            this.points.push(record['minutes']);
+            this.numberOfDaysPatched++;
+          } else {
+            this.points.push(0);
+          }
+        }
+        this.averageTimePatchedPerDay = Math.floor(totalPatchTime / this.numberOfDaysPatched);
+        this.averageTimePatchedPerDayOver30Days = Math.floor(totalPatchTime / 30);        
       } else {
         this.records = undefined;
         alert('Record key not found. Please enter a valid record key and try again.');
       }
-    },
-    getEventColor(event) {
-      return event.color
     },
   },
 }

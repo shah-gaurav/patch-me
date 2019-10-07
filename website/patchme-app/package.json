@@ -11,6 +11,7 @@
     "core-js": "^2.6.5",
     "firebase": "^6.6.0",
     "moment": "^2.24.0",
+    "pure-vue-chart": "^0.3.2",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
     "vuefire": "^2.1.2",

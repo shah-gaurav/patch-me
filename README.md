@@ -8,6 +8,11 @@ Download the app from [Patch Me Website](https://patchme.app)
 
 **Dedicated to my strong and beautiful daughter Aamani**
 
+## Reports
+Visit the [Patch Me Website](https://patchme.app/report) to generate and print a report to share with your child's provider.
+
+![Sample Report](https://github.com/shah-gaurav/patch-me/raw/master/images/ReportScreenShot.png)
+
 ## Screen Shots
 
 <img alt="Screen Shot 1" width="300" src="https://github.com/shah-gaurav/patch-me/raw/master/images/ScreenShot_1.png">
