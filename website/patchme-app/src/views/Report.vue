@@ -58,7 +58,7 @@ export default {
   },
   data() {
     return {
-      recordKey: '8430-1313-6812-0105',
+      recordKey: '',
       points: [],
       numberOfDaysPatched: 0,
       averageTimePatchedPerDay: undefined,
