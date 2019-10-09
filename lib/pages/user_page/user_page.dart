@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:binding/binding.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../models/app_model.dart';
 import '../../models/user_model.dart';
 import 'list_widget.dart';
@@ -77,6 +79,30 @@ class _UserPageState extends State<UserPage> {
               onPressed: () async {
                 Share.share(
                     'Patch Me App (https://patchme.app) record key: ${_passedInModel.userId}.');
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.insert_chart),
+              onPressed: () async {
+                final url =
+                    'https://patchme.app/report?id=${_passedInModel.userId}';
+                if (await canLaunch(url)) {
+                  await launch(url);
+                } else {
+                  Flushbar(
+                    messageText: Text(
+                      'Could not launch URL $url',
+                      style: TextStyle(fontSize: 18.0, color: Colors.white),
+                    ),
+                    icon: Icon(
+                      Icons.error,
+                      size: 28.0,
+                      color: Colors.red,
+                    ),
+                    duration: Duration(seconds: 5),
+                    leftBarIndicatorColor: Colors.red,
+                  )..show(context);
+                }
               },
             ),
             IconButton(
