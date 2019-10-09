@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-layout>
-      <v-flex class="text-md-center" xs12 md6 offset-md3>
+      <v-flex class="text-center" xs12 md6 offset-md3>
         <h1 class="title font-weight-bold">Patch Me: Eye Patch Tracking Report</h1>
         <p
           class="subtitle-1"
@@ -11,20 +11,20 @@
 
     <v-form ref="form">
       <v-layout row wrap justify-center>
-        <v-flex xs12 md3>
+        <v-flex xs10 md3>
           <v-text-field label="Record Key" v-model="recordKey"></v-text-field>
         </v-flex>
       </v-layout>
 
       <v-layout row wrap justify-center>
-        <v-flex xs12 md3>
+        <v-flex xs10 md3>
           <v-btn block class="primary" @click="createReport" :disabled="!recordKey">Show Report</v-btn>
         </v-flex>
       </v-layout>
     </v-form>
-    <v-layout v-if="records">    
-      <v-flex class="text-md-center pt-9" xs12 md8 offset-md2>
-        <h1 class="title font-weight-bold">Patching Report for Last 30 days</h1>  
+    <v-layout v-if="records">
+      <v-flex class="text-center pt-9" hidden-sm-and-down>
+        <h1 class="title font-weight-bold">Patching Report for Last 30 days</h1>
         <pure-vue-chart
           :points="points"
           :width="800"
@@ -37,11 +37,42 @@
           trend-line-color="lightblue"
         />
       </v-flex>
+      <v-flex class="text-center pt-9" hidden-md-and-up>
+        <h1 class="title font-weight-bold">Patching Report for Last 30 days</h1>
+        <pure-vue-chart
+          :points="points"
+          :width="500"
+          :height="200"
+          :show-y-axis="true"
+          :show-x-axis="true"
+          :show-values="true"
+          :show-trend-line="true"
+          :trend-line-width="2"
+          trend-line-color="lightblue"
+          class="hidden-xs-only"
+        />
+        <pure-vue-chart
+          :points="points"
+          :width="300"
+          :height="200"
+          :show-y-axis="true"
+          :show-x-axis="false"
+          :show-values="false"
+          :show-trend-line="true"
+          :trend-line-width="2"
+          trend-line-color="lightblue"
+          class="hidden-sm-and-up"
+        />
+      </v-flex>      
     </v-layout>
-    <v-layout v-if="records">    
-      <v-flex class="text-md-center pt-9" xs12 md8 offset-md2>
-        <h2 class="title">Average Minutes Patched per Day (Only on Days Patched): {{averageTimePatchedPerDay}}</h2> 
-        <h2 class="title">Average Minutes Patched per Day (All 30 days): {{averageTimePatchedPerDayOver30Days}}</h2>         
+    <v-layout v-if="records">
+      <v-flex class="text-center pt-9" xs12 md8 offset-md2>
+        <h2
+          class="title"
+        >Average Minutes Patched per Day (Only on Days Patched): {{averageTimePatchedPerDay}}</h2>
+        <h2
+          class="title"
+        >Average Minutes Patched per Day (All 30 days): {{averageTimePatchedPerDayOver30Days}}</h2>
       </v-flex>
     </v-layout>
   </v-container>
@@ -55,6 +86,11 @@ import PureVueChart from 'pure-vue-chart';
 export default {
   components: {
     PureVueChart,
+  },
+  created() {
+    if (this.$route.query.id) {
+      this.recordKey = this.$route.query.id;
+    }
   },
   data() {
     return {
@@ -73,14 +109,14 @@ export default {
         .get();
       if (documentSnapshot.exists) {
         var document = documentSnapshot.data();
-        this.records = document.data;        
+        this.records = document.data;
         this.points.length = 0;
         this.numberOfDaysPatched = 0;
         var totalPatchTime = 0;
-         for(var i = 30; i > 0; i--){
+        for (var i = 29; i >= 0; i--) {
           var date = moment().subtract(i, 'days').format('M/D/YYYY');
           var record = this.records.find(v => v['date'] === date);
-          if(record) {
+          if (record) {
             totalPatchTime += record['minutes'];
             this.points.push(record['minutes']);
             this.numberOfDaysPatched++;
@@ -89,7 +125,7 @@ export default {
           }
         }
         this.averageTimePatchedPerDay = Math.floor(totalPatchTime / this.numberOfDaysPatched);
-        this.averageTimePatchedPerDayOver30Days = Math.floor(totalPatchTime / 30);        
+        this.averageTimePatchedPerDayOver30Days = Math.floor(totalPatchTime / 30);
       } else {
         this.records = undefined;
         alert('Record key not found. Please enter a valid record key and try again.');
