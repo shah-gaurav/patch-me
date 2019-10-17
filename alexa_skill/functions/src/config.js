@@ -25,6 +25,7 @@ module.exports = {
       lastUsedAt: true,
       sessionsCount: true,
       createdAt: true,
+      requestHistorySize: 10,
       devices: true
     }
   }
