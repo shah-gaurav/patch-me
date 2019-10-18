@@ -21,7 +21,7 @@ app.use(
   new Alexa(),
   new GoogleAssistant(),
   new JovoDebugger(),
-  new Firestore(db)
+  new Firestore({}, db)
 );
 
 // ------------------------------------------------------------------

@@ -4,7 +4,7 @@ const jovo_core_1 = require('jovo-core');
 const _get = require('lodash.get');
 const _merge = require('lodash.merge');
 class Firestore {
-  constructor(firestore, config) {
+  constructor(config, firestore) {
     this.config = {
       collectionName: 'UserData',
       credential: undefined,
