@@ -25,10 +25,15 @@ export const sendNotifications = functions.https.onRequest(async (request, respo
                     const notificationData = notificationDoc.data();
                     if (notificationData !== undefined) {
                         const lastNotificationSent = notificationData['last-notification-sent'];
-                        if (lastNotificationSent !== undefined) {
+                        const lastNotificationId = notificationData['last-notification-id'];
+                        if (lastNotificationId === startTimeEpoch) {
+                            console.log(`Notification already sent for id ${lastNotificationId}. Not sending another notification.`);
+                            sendNotification = false;
+                        }
+                        else if (lastNotificationSent !== undefined) {
                             const dateLastNotificationSent = lastNotificationSent.toDate();
                             const timeSinceLastNotification = getMinutesBetweenDates(dateLastNotificationSent, new Date());
-                            if (timeSinceLastNotification < 4 * 60) {
+                            if (timeSinceLastNotification < 60) {
                                 console.log(`It has only been ${timeSinceLastNotification} minutes since last notification. Not sending another notification.`);
                                 sendNotification = false;
                             }
@@ -50,8 +55,8 @@ export const sendNotifications = functions.https.onRequest(async (request, respo
                     // Notification details.
                     const payload = {
                         notification: {
-                            title: 'Patching almost complete',
-                            body: `Less than ${difference} minutes remaining.`
+                            title: 'Patch Me',
+                            body: `Patching is almost complete, please check the app for more details.`
                         }
                     };
 
@@ -61,7 +66,10 @@ export const sendNotifications = functions.https.onRequest(async (request, respo
                         console.log(`Successfully sent notification: ${fcmResponse}`);
 
                         await db.collection("notifications").doc(doc.id)
-                            .set({ 'last-notification-sent': admin.firestore.FieldValue.serverTimestamp() });
+                            .set({
+                                'last-notification-sent': admin.firestore.FieldValue.serverTimestamp(),
+                                'last-notification-id': startTimeEpoch,
+                            });
                     }
                     catch (error) {
                         console.log(`Error sending notification: ${error}`);

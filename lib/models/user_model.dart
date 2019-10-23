@@ -18,6 +18,7 @@ class UserModel extends NotifyPropertyChanged {
   final _timerRunningKey = 'timer-running';
   final _startTimeKey = 'start-time';
   final _timeRemainingKey = 'time-remaining';
+  final _patchTimePerDayKey = 'patch-time-per-day';
   final _dataKey = 'data';
   final _deviceTokensKey = 'tokens';
 
@@ -204,11 +205,14 @@ class UserModel extends NotifyPropertyChanged {
 
   Future<void> save() async {
     await _userDocument.updateData({
+      _patchTimePerDayKey: patchTimePerDay,
       _timerRunningKey: timerStartTime == null ? false : true,
       _startTimeKey: timerStartTime?.millisecondsSinceEpoch,
-      _timeRemainingKey: patchTimePerDay - dataForToday.minutes,
+      _timeRemainingKey: timerStartTime == null
+          ? 0
+          : (todayMinutesRemaining > 0 ? todayMinutesRemaining : 60),
       _deviceTokensKey: _deviceTokens,
-      _dataKey: _data.map((item) => item.toJson()).toList(),
+      _dataKey: data.map((item) => item.toJson()).toList(),
     });
   }
 
