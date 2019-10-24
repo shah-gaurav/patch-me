@@ -8,7 +8,7 @@ const { App } = require('jovo-framework');
 const { Alexa } = require('jovo-platform-alexa');
 const { GoogleAssistant } = require('jovo-platform-googleassistant');
 const { JovoDebugger } = require('jovo-plugin-debugger');
-const { Firestore } = require('./firestore');
+const { Firestore } = require('jovo-db-firestore');
 
 const admin = require('firebase-admin');
 admin.initializeApp();

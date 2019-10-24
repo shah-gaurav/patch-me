@@ -6,6 +6,7 @@
   "dependencies": {
     "firebase-admin": "^8.6.0",
     "firebase-functions": "^3.3.0",
+    "jovo-db-firestore": "^2.2.14",
     "jovo-framework": "^2.2.18",
     "jovo-platform-alexa": "^2.0.2",
     "jovo-platform-googleassistant": "^2.0.2",
