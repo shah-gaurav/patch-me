@@ -9,11 +9,7 @@ const { Alexa } = require('jovo-platform-alexa');
 const { GoogleAssistant } = require('jovo-platform-googleassistant');
 const { JovoDebugger } = require('jovo-plugin-debugger');
 const { Firestore } = require('jovo-db-firestore');
-
-const admin = require('firebase-admin');
-admin.initializeApp();
-
-let db = admin.firestore();
+const { DB, GetRecordKeyFromPrefix } = require('./patchMeUser.js');
 
 const app = new App();
 
@@ -21,7 +17,7 @@ app.use(
   new Alexa(),
   new GoogleAssistant(),
   new JovoDebugger(),
-  new Firestore({}, db)
+  new Firestore({}, DB)
 );
 
 // ------------------------------------------------------------------
@@ -67,28 +63,21 @@ app.setHandler({
           "That doesn't seem to be 8 digits. Can you please repeat the first 8 digits of your record key."
         );
       } else {
-        const recordKeyPrefix =
-          this.$inputs.RecordKeyPrefix.value.substring(0, 4) +
-          '-' +
-          this.$inputs.RecordKeyPrefix.value.substring(4, 8);
-
-        console.log(`~~~~ Record Key Prefix: ${recordKeyPrefix}`);
         var speak =
           'I was not able to find any record keys that start with those numbers. Can you please repeat the first 8 digits of your record key.';
         var reprompt = speak;
 
-        var snapshot = await db.collection('users').get();
-        for (let doc of snapshot.docs) {
-          console.log(`~~~~ Checking against: ${doc.id}`);
-          if (doc.id.startsWith(recordKeyPrefix)) {
-            this.$user.$data.recordKey = doc.id;
-            speak = `Thanks, I'll remember that. \
-                    Now you can say start patching timer, stop patching timer, or ask me how many minutes of patching time is still remaining for today. \
-                    I can also give you a report for the last 30 days. What would you like to do next?`;
-            reprompt = `you can ask me to start patching timer, stop patching timer, or ask me how many minutes of patching is still remaining for today`;
-            this.removeState();
-            break;
-          }
+        let recordKey = await GetRecordKeyFromPrefix(
+          this.$inputs.RecordKeyPrefix.value
+        );
+
+        if (recordKey) {
+          this.$user.$data.recordKey = recordKey;
+          speak = `Thanks, I'll remember that. \
+                  Now you can say start patching timer, stop patching timer, or ask me how many minutes of patching time is still remaining for today. \
+                  I can also give you a report for the last 30 days. What would you like to do next?`;
+          reprompt = `you can ask me to start patching timer, stop patching timer, or ask me how many minutes of patching is still remaining for today`;
+          this.removeState();
         }
 
         this.ask(speak, reprompt);
