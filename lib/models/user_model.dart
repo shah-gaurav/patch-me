@@ -4,6 +4,7 @@ import 'package:binding/binding.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:patch_me/models/firebase_constants.dart';
+import 'package:sorted_list/sorted_list.dart';
 
 import 'patch_time_model.dart';
 
@@ -65,12 +66,10 @@ class UserModel extends NotifyPropertyChanged {
   }
 
   // data Property
-  List<PatchTimeModel> _data = List<PatchTimeModel>();
+  SortedList<PatchTimeModel> _data =
+      SortedList<PatchTimeModel>((a, b) => b.date.compareTo(a.date));
 
-  List<PatchTimeModel> get data {
-    _data.sort((a, b) => b.date.compareTo(a.date));
-    return _data;
-  }
+  List<PatchTimeModel> get data => _data;
 
   // device tokens Property
   List<String> _deviceTokens = List<String>();
