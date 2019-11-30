@@ -76,7 +76,7 @@ class _AddUserPageState extends State<AddUserPage> {
                             validators: [
                               FormBuilderValidators.required(),
                               FormBuilderValidators.numeric(),
-                              FormBuilderValidators.max(300),
+                              FormBuilderValidators.max(500),
                             ],
                           ),
                           FormBuilderSegmentedControl(

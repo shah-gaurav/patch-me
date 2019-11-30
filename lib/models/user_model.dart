@@ -155,10 +155,12 @@ class UserModel extends NotifyPropertyChanged {
 
   _loadUser(userDocument) {
     if (userDocument[_dataKey] != null) {
-      _data.clear();
+      final userDocumentData = List<PatchTimeModel>();
       for (var item in List.from(userDocument[_dataKey])) {
-        _data.add(PatchTimeModel.fromJson(item));
+        userDocumentData.add(PatchTimeModel.fromJson(item));
       }
+      _data.clear();
+      _data.addAll(userDocumentData);
     }
     if (userDocument[_startTimeKey] != null) {
       timerStartTime =

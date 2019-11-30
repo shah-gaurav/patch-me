@@ -57,7 +57,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                     validators: [
                       FormBuilderValidators.required(),
                       FormBuilderValidators.numeric(),
-                      FormBuilderValidators.max(300),
+                      FormBuilderValidators.max(500),
                     ],
                     onChanged: (_) {
                       setState(() {

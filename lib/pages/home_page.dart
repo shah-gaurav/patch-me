@@ -48,13 +48,9 @@ class HomePage extends StatelessWidget {
                                 textAlign: TextAlign.center,
                               )
                             : ListView.builder(
-                                itemCount: BindingSource.of<AppModel>(context)
-                                    .users
-                                    .length,
+                                itemCount: model.users.length,
                                 itemBuilder: (_, int index) {
-                                  final user =
-                                      BindingSource.of<AppModel>(context)
-                                          .users[index];
+                                  final user = model.users[index];
                                   return InkWell(
                                     onTap: () => Navigator.pushNamed(
                                         context, UserPage.routeName,
