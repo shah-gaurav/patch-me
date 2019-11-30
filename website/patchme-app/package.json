@@ -13,6 +13,7 @@
     "moment": "^2.24.0",
     "pure-vue-chart": "^0.3.2",
     "vue": "^2.6.10",
+    "vue-material-design-icons": "^4.3.0",
     "vue-router": "^3.0.3",
     "vuefire": "^2.1.2",
     "vuetify": "^2.0.0"

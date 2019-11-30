@@ -1,21 +1,27 @@
 <template>
   <v-app>
     <v-app-bar app>
-       <v-toolbar-title class="logo">
-          <span>Patch Me</span>
-        </v-toolbar-title>     
+      <v-toolbar-title
+        style="font-family: 'Pacifico', cursive; font-size: 26px;"
+      >
+        <span>Patch Me</span>
+      </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="d-none d-sm-flex">
         <v-btn text to="/">
-          <v-icon>mdi-home</v-icon>&nbsp;
+          <home-icon /> &nbsp;
           <span class="mr-2">Home</span>
         </v-btn>
         <v-btn text to="/report">
-          <v-icon>mdi-file-document-box</v-icon>&nbsp;
+          <file-document-box />&nbsp;
           <span class="mr-2">Report</span>
         </v-btn>
-        <v-btn text href="https://github.com/shah-gaurav/patch-me" target="_blank">
-          <v-icon>mdi-github-circle</v-icon>&nbsp;
+        <v-btn
+          text
+          href="https://github.com/shah-gaurav/patch-me"
+          target="_blank"
+        >
+          <github-circle />&nbsp;
           <span class="mr-2">Souce Code</span>
         </v-btn>
       </v-toolbar-items>
@@ -45,7 +51,11 @@
           </v-list-item>
           <v-list-item>
             <v-list-item-title>
-              <v-btn text href="https://github.com/shah-gaurav/patch-me" target="_blank">
+              <v-btn
+                text
+                href="https://github.com/shah-gaurav/patch-me"
+                target="_blank"
+              >
                 <v-icon>mdi-github-circle</v-icon>&nbsp;
                 <span class="mr-2">Souce Code</span>
               </v-btn>
@@ -63,12 +73,17 @@
       <div class="flex-grow-1"></div>
       <div class="body-2">
         &copy;
-        <a href="http://www.linkedin.com/in/gaurav-shah-boise" target="_blank">Gaurav Shah</a>
+        <a href="http://www.linkedin.com/in/gaurav-shah-boise" target="_blank"
+          >Gaurav Shah</a
+        >
         - {{ new Date().getFullYear() }}
       </div>
       <div class="body-2 pl-2">|</div>
       <div class="body-2 pl-2">
-        <a href="https://github.com/shah-gaurav/patch-me/blob/master/PRIVACY.md" target="_blank">
+        <a
+          href="https://github.com/shah-gaurav/patch-me/blob/master/PRIVACY.md"
+          target="_blank"
+        >
           <span class="mr-2">Privacy Policy</span>
         </a>
       </div>
@@ -77,11 +92,16 @@
   </v-app>
 </template>
 
-<style>
-@import url("https://fonts.googleapis.com/css?family=Pacifico&display=swap");
+<script>
+import HomeIcon from 'vue-material-design-icons/Home.vue';
+import FileDocumentBox from 'vue-material-design-icons/FileDocumentBox.vue';
+import GithubCircle from 'vue-material-design-icons/GithubCircle.vue';
 
-.logo {
-  font-family: "Pacifico", cursive;
-  font-size: 26px;
-}
-</style>
+export default {
+  components: {
+    HomeIcon,
+    FileDocumentBox,
+    GithubCircle
+  }
+};
+</script>
