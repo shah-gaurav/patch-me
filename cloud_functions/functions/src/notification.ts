@@ -16,6 +16,13 @@ export const sendNotifications = functions.https.onRequest(async (request, respo
         const startTime = new Date(startTimeEpoch);
         const timeElapsed = getMinutesBetweenDates(startTime, new Date());
         const difference = timeRemaining - timeElapsed;
+        const timeElapsedInHours = Math.floor(timeElapsed / 60);
+
+        if (timeElapsedInHours > 16) {
+            console.log(`${doc.id} has time elapsed greater than 16 hours: ${timeElapsedInHours} hours. Turning off timer.`);
+            await db.collection("users").doc(doc.id).update({ 'timer-running': false });
+            continue;
+        }
 
         if (difference < 10) {
             let sendNotification = true;
