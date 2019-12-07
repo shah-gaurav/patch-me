@@ -133,7 +133,7 @@ class _UserPageState extends State<UserPage> {
         bottomNavigationBar: CurvedNavigationBar(
           key: _bottomNavigationKey,
           backgroundColor: Theme.of(context).canvasColor,
-          color: Colors.blue,
+          color: Theme.of(context).bottomAppBarColor,
           items: <Widget>[
             Icon(
               Icons.timer,

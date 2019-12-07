@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:binding/binding.dart';
 import 'package:flutter/services.dart';
 
+import 'constants.dart';
 import 'models/app_model.dart';
 import 'pages/add_user_page.dart';
 import 'pages/home_page.dart';
@@ -38,28 +39,16 @@ class MyApp extends StatelessWidget {
           ],
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-            buttonColor: Colors.green,
-            textTheme: TextTheme(
-                headline: TextStyle(
-                  fontFamily: 'pacifico',
-                  fontSize: 30,
-                ),
-                title: TextStyle(
-                  fontFamily: 'caveat',
-                  fontSize: 26,
-                ),
-                subhead: TextStyle(
-                  fontFamily: 'caveat',
-                  fontSize: 24,
-                ),
-                body1: TextStyle(
-                  fontFamily: 'caveat',
-                  fontSize: 22,
-                ),
-                button: TextStyle(
-                  fontFamily: 'pacifico',
-                  fontSize: 20,
-                )),
+              textTheme: kTextTheme,
+              accentColor: Colors.blue,
+              bottomAppBarColor: Colors.blue,
+              buttonColor: Colors.blue,
+              buttonTheme: ButtonThemeData(
+                textTheme: ButtonTextTheme.primary,
+              )),
+          darkTheme: ThemeData.dark().copyWith(
+            textTheme: kTextTheme,
+            accentColor: Colors.blue,
           ),
           home: HomePage(),
           routes: {

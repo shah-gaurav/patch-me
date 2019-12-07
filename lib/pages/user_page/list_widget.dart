@@ -38,7 +38,7 @@ class _ListWidgetState extends State<ListWidget> {
                 style: Theme.of(context).textTheme.body1,
               ),
               trailing: IconButton(
-                color: Theme.of(context).primaryColor,
+                color: Theme.of(context).accentColor,
                 icon: Icon(Icons.edit),
                 onPressed: () {
                   _showModalDialog(context, userModel.data[index]);
@@ -65,6 +65,9 @@ class _ListWidgetState extends State<ListWidget> {
 
   _showModalDialog(BuildContext context, PatchTimeModel data) {
     Alert(
+      style: AlertStyle(
+          titleStyle:
+              TextStyle(color: Theme.of(context).textTheme.title.color)),
       context: context,
       title: 'Patch Time',
       content: Column(
