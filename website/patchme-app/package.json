@@ -8,8 +8,8 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "core-js": "^2.6.11",
-    "firebase": "^6.6.2",
+    "core-js": "^3.4.3",
+    "firebase": "^7.5.2",
     "moment": "^2.24.0",
     "pure-vue-chart": "^0.3.4",
     "vue": "^2.6.10",
@@ -19,17 +19,17 @@
     "vuetify": "^2.1.13"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.12.1",
-    "@vue/cli-plugin-eslint": "^3.12.1",
-    "@vue/cli-service": "^3.12.1",
+    "@vue/cli-plugin-babel": "^4.1.1",
+    "@vue/cli-plugin-eslint": "^4.1.1",
+    "@vue/cli-service": "^4.1.1",
     "babel-eslint": "^10.0.1",
     "deepmerge": "^4.2.2",
-    "eslint": "^5.16.0",
-    "eslint-plugin-vue": "^5.0.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^6.0.1",
     "fibers": "^4.0.2",
     "sass": "^1.23.7",
     "sass-loader": "^7.3.1",
-    "vue-cli-plugin-vuetify": "^0.6.3",
+    "vue-cli-plugin-vuetify": "^2.0.2",
     "vue-template-compiler": "^2.6.10",
     "vuetify-loader": "^1.4.3"
   },
