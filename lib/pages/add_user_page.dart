@@ -92,7 +92,7 @@ class _AddUserPageState extends State<AddUserPage> {
                                   padding:
                                       EdgeInsets.symmetric(horizontal: 5.0),
                                   child: Center(
-                                    child: AutoSizeText('Generae Random'),
+                                    child: AutoSizeText('Generate Random'),
                                   ),
                                 ),
                               ),
