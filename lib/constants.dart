@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+const kMaximumPatchTime = 600;
+
 const kTextTheme = TextTheme(
   headline: TextStyle(
     fontFamily: 'pacifico',

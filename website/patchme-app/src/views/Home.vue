@@ -26,7 +26,25 @@
     <v-row>
       <v-col class="text-center">
         <p class="font-weight-bold body-1">Dedicated to my brave and beautiful daughter Aamani</p>
-        <v-img :src="require('../assets/Aamani.jpg')" class="my-3" contain height="400"></v-img>
+        <v-flex hidden-md-and-up>
+          <div class="embed-container">
+            <iframe
+              src="https://www.youtube.com/embed//qnofZc6Pn3Y"
+              frameborder="0"
+              allowfullscreen
+            ></iframe>
+          </div>
+        </v-flex>
+        <v-flex hidden-sm-and-down>
+          <iframe
+            width="560"
+            height="315"
+            src="https://www.youtube.com/embed/qnofZc6Pn3Y"
+            frameborder="0"
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </v-flex>
       </v-col>
     </v-row>
   </v-container>
@@ -38,3 +56,22 @@ export default {
   name: 'home',
 }
 </script>
+
+<style scoped>
+.embed-container {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  max-width: 100%;
+}
+.embed-container iframe,
+.embed-container object,
+.embed-container embed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+</style>

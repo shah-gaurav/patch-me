@@ -97,6 +97,8 @@ PODS:
     - GoogleUtilities/UserDefaults (~> 6.2)
     - Protobuf (~> 3.1)
   - Flutter (1.0.0)
+  - flutter_keyboard_visibility (0.7.0):
+    - Flutter
   - GoogleAppMeasurement (6.0.3):
     - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
     - GoogleUtilities/MethodSwizzler (~> 6.0)
@@ -138,9 +140,6 @@ PODS:
     - nanopb (~> 0.3)
   - gRPC-Core/Interface (1.21.0)
   - GTMSessionFetcher/Core (1.2.2)
-  - keyboard_visibility (0.5.0):
-    - Flutter
-    - Reachability
   - leveldb-library (1.20)
   - nanopb (0.3.901):
     - nanopb/decode (= 0.3.901)
@@ -148,7 +147,6 @@ PODS:
   - nanopb/decode (0.3.901)
   - nanopb/encode (0.3.901)
   - Protobuf (3.9.0)
-  - Reachability (3.2)
   - share (0.5.2):
     - Flutter
   - shared_preferences (0.0.1):
@@ -163,8 +161,8 @@ DEPENDENCIES:
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
-  - Flutter (from `.symlinks/flutter/ios`)
-  - keyboard_visibility (from `.symlinks/plugins/keyboard_visibility/ios`)
+  - Flutter (from `Flutter`)
+  - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
   - share (from `.symlinks/plugins/share/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
@@ -191,7 +189,6 @@ SPEC REPOS:
     - leveldb-library
     - nanopb
     - Protobuf
-    - Reachability
 
 EXTERNAL SOURCES:
   cloud_firestore:
@@ -207,9 +204,9 @@ EXTERNAL SOURCES:
   firebase_messaging:
     :path: ".symlinks/plugins/firebase_messaging/ios"
   Flutter:
-    :path: ".symlinks/flutter/ios"
-  keyboard_visibility:
-    :path: ".symlinks/plugins/keyboard_visibility/ios"
+    :path: Flutter
+  flutter_keyboard_visibility:
+    :path: ".symlinks/plugins/flutter_keyboard_visibility/ios"
   share:
     :path: ".symlinks/plugins/share/ios"
   shared_preferences:
@@ -237,20 +234,19 @@ SPEC CHECKSUMS:
   FirebaseInstanceID: 9782fcfb89e4d7da76cc28eac4b8543dc7be4a4b
   FirebaseMessaging: 6bb0bdaf64c55fef7a219b7bb1e94e94a0855ced
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  flutter_keyboard_visibility: 6195387fb6d8f46e5cd6dda4a4154e41f800f545
   GoogleAppMeasurement: 1e45fa601e6280c180880d57010390f6679cd971
   GoogleUtilities: d2b0e277a95962e09bb27f5cd42f5f0b6a506c7d
   "gRPC-C++": 9dfe7b44821e7b3e44aacad2af29d2c21f7cde83
   gRPC-Core: c9aef9a261a1247e881b18059b84d597293c9947
   GTMSessionFetcher: 61bb0f61a4cb560030f1222021178008a5727a23
-  keyboard_visibility: 96a24de806fe6823c3ad956c01ba2ec6d056616f
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   Protobuf: 1097ca58584c8d9be81bfbf2c5ff5975648dd87a
-  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   share: 7d22fe8baedfe93aefd864bf0b73f29711fbb0a3
   shared_preferences: 1feebfa37bb57264736e16865e7ffae7fc99b523
   url_launcher: 0067ddb8f10d36786672aa0722a21717dba3a298
 
-PODFILE CHECKSUM: b6a0a141693093b304368d08511b46cf3d1d0ac5
+PODFILE CHECKSUM: 1b66dae606f75376c5f2135a8290850eeb09ae83
 
 COCOAPODS: 1.8.3

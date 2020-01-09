@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:binding/binding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:patch_me/constants.dart';
 import 'package:random_string/random_string.dart';
 import '../models/app_model.dart';
 
@@ -76,7 +77,7 @@ class _AddUserPageState extends State<AddUserPage> {
                             validators: [
                               FormBuilderValidators.required(),
                               FormBuilderValidators.numeric(),
-                              FormBuilderValidators.max(500),
+                              FormBuilderValidators.max(kMaximumPatchTime),
                             ],
                           ),
                           FormBuilderSegmentedControl(

@@ -2,6 +2,7 @@ import 'package:binding/binding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
+import 'package:patch_me/constants.dart';
 import 'package:patch_me/models/patch_time_model.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
@@ -87,7 +88,7 @@ class _ListWidgetState extends State<ListWidget> {
               validators: [
                 FormBuilderValidators.required(),
                 FormBuilderValidators.numeric(),
-                FormBuilderValidators.max(300),
+                FormBuilderValidators.max(kMaximumPatchTime),
               ],
             ),
           ),

@@ -12,6 +12,7 @@ import 'pages/home_page.dart';
 import 'package:patch_me/pages/user_page/user_page.dart';
 
 Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   // Pass all uncaught errors from the framework to Crashlytics.
   FlutterError.onError = Crashlytics.instance.recordFlutterError;
 

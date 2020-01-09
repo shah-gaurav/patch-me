@@ -2,6 +2,7 @@ import 'package:binding/binding.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:patch_me/constants.dart';
 import 'package:patch_me/models/app_model.dart';
 import '../../models/user_model.dart';
 
@@ -57,7 +58,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                     validators: [
                       FormBuilderValidators.required(),
                       FormBuilderValidators.numeric(),
-                      FormBuilderValidators.max(500),
+                      FormBuilderValidators.max(kMaximumPatchTime),
                     ],
                     onChanged: (_) {
                       setState(() {
