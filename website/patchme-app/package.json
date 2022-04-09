@@ -10,7 +10,7 @@
   "dependencies": {
     "core-js": "^3.4.3",
     "firebase": "^7.5.2",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "pure-vue-chart": "^0.3.4",
     "vue": "^2.6.10",
     "vue-material-design-icons": "^4.3.0",
