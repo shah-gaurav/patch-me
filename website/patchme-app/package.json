@@ -16,7 +16,7 @@
     "vue-material-design-icons": "^4.3.0",
     "vue-router": "^3.0.3",
     "vuefire": "^2.2.0",
-    "vuetify": "^2.1.13"
+    "vuetify": "^2.6.10"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.1.1",
