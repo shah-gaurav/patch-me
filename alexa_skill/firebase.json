@@ -1,6 +1,0 @@
-{
-  "functions": {
-    "source": "functions/bundle",
-    "predeploy": "npm --prefix functions run bundle"
-  }
-}
