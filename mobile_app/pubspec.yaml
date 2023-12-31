@@ -1,0 +1,46 @@
+name: patch_me
+description: 'Patch Me is an Open Source FREE App that allows parents to track the eye patching time for their children'
+publish_to: 'none'
+version: 2.0.0
+
+environment:
+  sdk: '>=3.2.3 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  english_words: ^4.0.0
+  provider: ^6.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+  flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: ^2.3.8
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/patch-me-logo.png
+
+# Launch icon settings
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: 'assets/icon/patch-me-icon.png'
+  image_path_android: 'assets/icon/patch-me-icon-android.png'
+  min_sdk_android: 33 # android min sdk min:16, default 21
+  remove_alpha_ios: true
+
+# Splash Screen Settings
+flutter_native_splash:
+  #general
+  color: '#f48d6b'
+  image: assets/images/patch-me-logo.png
+  android_12:
+    image: assets/icon/patch-me-icon-android.png
+    icon_background_color: '#f48d6b'
+    color: '#f48d6b'
