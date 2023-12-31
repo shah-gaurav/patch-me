@@ -12,11 +12,13 @@ dependencies:
 
   english_words: ^4.0.0
   provider: ^6.0.0
+  go_router: ^13.0.0
+  google_fonts: ^6.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.1
   flutter_launcher_icons: ^0.13.1
   flutter_native_splash: ^2.3.8
 
@@ -38,9 +40,9 @@ flutter_launcher_icons:
 # Splash Screen Settings
 flutter_native_splash:
   #general
-  color: '#f48d6b'
+  color: '#F4F27E'
   image: assets/images/patch-me-logo.png
   android_12:
     image: assets/icon/patch-me-icon-android.png
-    icon_background_color: '#f48d6b'
-    color: '#f48d6b'
+    icon_background_color: '#F4F27E'
+    color: '#F4F27E'
