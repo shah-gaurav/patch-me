@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:patch_me/pages/components/patch_me_video.dart';
 import 'package:patch_me/state/app_state.dart';
 import 'package:provider/provider.dart';
 
@@ -15,7 +17,7 @@ class HomePage extends StatelessWidget {
           child: Column(
             children: [
               const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 40.0),
+                padding: EdgeInsets.fromLTRB(80.0, 40.0, 80.0, 20.0),
                 child:
                     Image(image: AssetImage('assets/images/patch-me-logo.png')),
               ),
@@ -35,10 +37,27 @@ class HomePage extends StatelessWidget {
                 height: 20,
               ),
               if (appState.children.isEmpty)
-                Text(
-                  'Add your child to start tracking their eye patching progress',
-                  style: Theme.of(context).textTheme.titleLarge,
-                  textAlign: TextAlign.center,
+                Flexible(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Text(
+                          'Our Story',
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20.0, vertical: 10.0),
+                          child: PatchMeVideo(),
+                        ),
+                        Text(
+                          'Add your child to start tracking their eye patching progress',
+                          style: Theme.of(context).textTheme.titleLarge,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
                 )
               else
                 Expanded(
@@ -68,9 +87,9 @@ class HomePage extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/login');
+                  context.push('/add-child');
                 },
-                child: const Text('Add Child'),
+                child: const Text('Add Your Child'),
               ),
             ],
           ),

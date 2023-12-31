@@ -13,7 +13,7 @@ class AppState extends ChangeNotifier {
 
   AppState() {
     // add a child to the array
-    addChild(Child(name: 'Aamani'));
-    addChild(Child(name: 'Aayushi'));
+    // addChild(Child(name: 'Aamani'));
+    // addChild(Child(name: 'Aayushi'));
   }
 }
