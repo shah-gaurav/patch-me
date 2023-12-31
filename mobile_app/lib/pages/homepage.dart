@@ -43,16 +43,16 @@ class HomePage extends StatelessWidget {
                       children: [
                         Text(
                           'Our Story',
-                          style: Theme.of(context).textTheme.headlineMedium,
+                          style: Theme.of(context).textTheme.headlineLarge,
                         ),
                         const Padding(
                           padding: EdgeInsets.symmetric(
-                              horizontal: 20.0, vertical: 10.0),
+                              horizontal: 40.0, vertical: 15.0),
                           child: PatchMeVideo(),
                         ),
                         Text(
                           'Add your child to start tracking their eye patching progress',
-                          style: Theme.of(context).textTheme.titleLarge,
+                          style: Theme.of(context).textTheme.titleMedium,
                           textAlign: TextAlign.center,
                         ),
                       ],
