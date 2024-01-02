@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
+import 'package:patch_me/models/child.dart';
+import 'package:patch_me/state/app_state.dart';
+import 'package:provider/provider.dart';
 import 'package:random_string/random_string.dart';
 
 class AddChild extends StatefulWidget {
@@ -20,6 +23,8 @@ class _AddChildState extends State<AddChild> {
 
   @override
   Widget build(BuildContext context) {
+    var appState = context.watch<AppState>();
+
     return Scaffold(
       appBar: AppBar(
           title: const Text('Add Your Child'),
@@ -115,7 +120,20 @@ class _AddChildState extends State<AddChild> {
                         height: 20,
                       ),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          // Validate and save the form values
+                          _formKey.currentState?.saveAndValidate();
+                          await appState.addChild(Child(
+                            name: _formKey.currentState?.value['name'],
+                            patchTime: int.parse(
+                                _formKey.currentState?.value['patchTime']),
+                            recordKey:
+                                _formKey.currentState?.value['recordKey'],
+                          ));
+                          if (context.mounted) {
+                            context.pop();
+                          }
+                        },
                         child: const Text('Add Child'),
                       ),
                     ],

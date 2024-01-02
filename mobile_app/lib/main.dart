@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:patch_me/models/child.dart';
 import 'package:patch_me/pages/add_child.dart';
 import 'package:patch_me/pages/homepage.dart';
+import 'package:patch_me/services/child_service.dart';
 import 'package:patch_me/state/app_state.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+Future<void> main() async {
   // We need to call it manually,
   // because we going to call setPreferredOrientations()
   // before the runApp() call
@@ -17,7 +19,18 @@ void main() {
   // and only after it finished we run our app
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  runApp(const MyApp());
+  var children = await ChildService.retrieveChildren();
+
+  await GoogleFonts.pendingFonts(
+    [
+      GoogleFonts.patrickHand(),
+      GoogleFonts.patrickHandSc(),
+      GoogleFonts.pacifico(),
+    ]);
+
+  runApp(MyApp(
+    children: children,
+  ));
 }
 
 final _router = GoRouter(
@@ -34,14 +47,19 @@ final _router = GoRouter(
 );
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({
+    super.key,
+    required this.children,
+  });
+
+  final List<Child> children;
 
   @override
   Widget build(BuildContext context) {
     ThemeData theme = getCustomTheme(context);
 
     return ChangeNotifierProvider(
-      create: (context) => AppState(),
+      create: (context) => AppState(children),
       child: MaterialApp.router(
         title: 'Patch Me',
         theme: theme,
