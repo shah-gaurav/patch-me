@@ -41,3 +41,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Should not check in firebase options file in an open source project
+lib/firebase_options.dart
+lib/firebase_constants.dart
