@@ -19,6 +19,8 @@ dependencies:
   form_builder_validators: ^9.1.0
   random_string: ^2.3.1
   shared_preferences: ^2.2.2
+  firebase_core: ^2.24.2
+  firebase_crashlytics: ^3.4.8
 
 dev_dependencies:
   flutter_test:

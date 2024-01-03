@@ -78,3 +78,6 @@ firebase_constants.dart
 
 # Android
 key.properties
+
+# Should not check in firebase options file in an open source project
+mobile_app/lib/firebase_options.dart

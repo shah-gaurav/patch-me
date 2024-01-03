@@ -1,3 +1,5 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
@@ -8,6 +10,8 @@ import 'package:patch_me/pages/homepage.dart';
 import 'package:patch_me/services/child_service.dart';
 import 'package:patch_me/state/app_state.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 Future<void> main() async {
   // We need to call it manually,
@@ -18,6 +22,8 @@ Future<void> main() async {
   // Than we setup preferred orientations,
   // and only after it finished we run our app
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
+  await initializeFirebase();
 
   var children = await ChildService.retrieveChildren();
 
@@ -30,6 +36,21 @@ Future<void> main() async {
   runApp(MyApp(
     children: children,
   ));
+}
+
+Future<void> initializeFirebase() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
+  // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
 }
 
 final _router = GoRouter(
