@@ -37,51 +37,9 @@ class HomePage extends StatelessWidget {
                 height: 20,
               ),
               if (appState.children.isEmpty)
-                Flexible(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Text(
-                          'Our Story',
-                          style: Theme.of(context).textTheme.headlineLarge,
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 40.0, vertical: 15.0),
-                          child: PatchMeVideo(),
-                        ),
-                        Text(
-                          'Add your child to start tracking their eye patching progress',
-                          style: Theme.of(context).textTheme.titleMedium,
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ),
-                )
+                const OurStory()
               else
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: ListView.builder(
-                      itemCount: appState.children.length,
-                      itemBuilder: (context, index) {
-                        var child = appState.children[index];
-                        return Card(
-                          child: ListTile(
-                            tileColor: Theme.of(context).colorScheme.secondary,
-                            leading: const Icon(Icons.child_care),
-                            title: Text(child.name),
-                            trailing: const Icon(Icons.arrow_forward_ios),
-                            onTap: () {
-                              Navigator.pushNamed(context, '/child');
-                            },
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
+                Children(appState: appState),
               const SizedBox(
                 height: 20,
               ),
@@ -93,6 +51,72 @@ class HomePage extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class OurStory extends StatelessWidget {
+  const OurStory({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Flexible(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Text(
+              'Our Story',
+              style: Theme.of(context).textTheme.headlineLarge,
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 15.0),
+              child: PatchMeVideo(),
+            ),
+            Text(
+              'Add your child to start tracking their eye patching progress',
+              style: Theme.of(context).textTheme.titleMedium,
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class Children extends StatelessWidget {
+  const Children({
+    super.key,
+    required this.appState,
+  });
+
+  final AppState appState;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: ListView.builder(
+          itemCount: appState.children.length,
+          itemBuilder: (context, index) {
+            var child = appState.children[index];
+            return Card(
+              child: ListTile(
+                tileColor: Theme.of(context).colorScheme.secondary,
+                leading: const Icon(Icons.child_care),
+                title: Text(child.name),
+                trailing: const Icon(Icons.arrow_forward_ios),
+                onTap: () {
+                  Navigator.pushNamed(context, '/child');
+                },
+              ),
+            );
+          },
         ),
       ),
     );

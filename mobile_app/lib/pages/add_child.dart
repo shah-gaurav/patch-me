@@ -39,13 +39,6 @@ class _AddChildState extends State<AddChild> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Text(
-                'We are parents as well and understand the importance of protecting your child\'s privacy. No identifying information about you or your child is stored outside of your device.',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
               FormBuilder(
                 key: _formKey,
                 autovalidateMode: AutovalidateMode.always,
@@ -54,91 +47,106 @@ class _AddChildState extends State<AddChild> {
                   'patchTime': '60',
                   'recordKey': _generateRandomKey(),
                 },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Column(
-                    children: [
-                      FormBuilderTextField(
-                        name: 'name',
-                        decoration: const InputDecoration(labelText: 'Name'),
-                        validator: FormBuilderValidators.required(),
-                      ),
-                      FormBuilderTextField(
-                        name: 'patchTime',
-                        decoration: const InputDecoration(
-                            labelText: 'Patch Time (minutes per day)'),
-                        validator: FormBuilderValidators.compose([
-                          FormBuilderValidators.required(),
-                          FormBuilderValidators.numeric(),
-                          FormBuilderValidators.min(0),
-                          FormBuilderValidators.max(1440),
-                        ]),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        'Record Key',
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      const Text(
-                        'Record Key is only used to track how many minutes the eye patch is worn. It is not used to identify your child or you.',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      FormBuilderSwitch(
-                        name: 'existingRecordKey',
-                        title: Text(
-                          'I have already setup my child on another device and have a record key',
-                          style: Theme.of(context).textTheme.bodyLarge,
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 20.0, right: 20.0, bottom: 20.0),
+                    child: Column(
+                      children: [
+                        FormBuilderTextField(
+                          name: 'name',
+                          decoration: const InputDecoration(labelText: 'Name'),
+                          validator: FormBuilderValidators.required(),
                         ),
-                        decoration:
-                            const InputDecoration(border: InputBorder.none),
-                        onChanged: (value) {
-                          if (value != null && value) {
-                            _formKey.currentState?.fields['recordKey']
-                                ?.didChange('');
-                          } else {
-                            var recordKey = _generateRandomKey();
-                            _formKey.currentState?.fields['recordKey']
-                                ?.didChange(recordKey);
-                          }
-                        },
-                      ),
-                      FormBuilderTextField(
-                        name: 'recordKey',
-                        decoration:
-                            const InputDecoration(labelText: 'Record Key'),
-                        validator: FormBuilderValidators.compose([
-                          FormBuilderValidators.required(),
-                          FormBuilderValidators.minLength(19),
-                          FormBuilderValidators.maxLength(19),
-                          FormBuilderValidators.match(
-                              '\\d{4}-\\d{4}-\\d{4}-\\d{4}')
-                        ]),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          // Validate and save the form values
-                          _formKey.currentState?.saveAndValidate();
-                          await appState.addChild(Child(
-                            name: _formKey.currentState?.value['name'],
-                            patchTime: int.parse(
-                                _formKey.currentState?.value['patchTime']),
-                            recordKey:
-                                _formKey.currentState?.value['recordKey'],
-                          ));
-                          if (context.mounted) {
-                            context.pop();
-                          }
-                        },
-                        child: const Text('Add Child'),
-                      ),
-                    ],
+                        FormBuilderTextField(
+                          name: 'patchTime',
+                          decoration: const InputDecoration(
+                              labelText: 'Patch Time (minutes per day)'),
+                          validator: FormBuilderValidators.compose([
+                            FormBuilderValidators.required(),
+                            FormBuilderValidators.numeric(),
+                            FormBuilderValidators.min(0),
+                            FormBuilderValidators.max(1440),
+                          ]),
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: false,
+                            signed: false,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          'Record Key',
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        const Text(
+                          'Record Key is only used to track how many minutes the eye patch is worn. It is not used to identify your child or you.',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        FormBuilderSwitch(
+                          name: 'existingRecordKey',
+                          title: Text(
+                            'I have already setup my child on another device and have a record key',
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
+                          decoration:
+                              const InputDecoration(border: InputBorder.none),
+                          onChanged: (value) {
+                            if (value != null && value) {
+                              _formKey.currentState?.fields['recordKey']
+                                  ?.didChange('');
+                            } else {
+                              var recordKey = _generateRandomKey();
+                              _formKey.currentState?.fields['recordKey']
+                                  ?.didChange(recordKey);
+                            }
+                          },
+                        ),
+                        FormBuilderTextField(
+                            name: 'recordKey',
+                            decoration:
+                                const InputDecoration(labelText: 'Record Key'),
+                            validator: FormBuilderValidators.compose([
+                              FormBuilderValidators.required(),
+                              FormBuilderValidators.minLength(19),
+                              FormBuilderValidators.maxLength(19),
+                              FormBuilderValidators.match(
+                                  '\\d{4}-\\d{4}-\\d{4}-\\d{4}')
+                            ]),
+                            keyboardType: TextInputType.phone),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        ElevatedButton(
+                          onPressed: () async {
+                            // Validate and save the form values
+                            _formKey.currentState?.saveAndValidate();
+                            await appState.addChild(Child(
+                              name: _formKey.currentState?.value['name'],
+                              patchTime: int.parse(
+                                  _formKey.currentState?.value['patchTime']),
+                              recordKey:
+                                  _formKey.currentState?.value['recordKey'],
+                            ));
+                            if (context.mounted) {
+                              context.pop();
+                            }
+                          },
+                          child: const Text('Add Child'),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Text(
+                'We are parents as well and understand the importance of protecting your child\'s privacy. No identifying information about you or your child is stored outside of your device.',
+                style: Theme.of(context).textTheme.titleMedium,
+                textAlign: TextAlign.center,
               ),
             ],
           ),

@@ -21,12 +21,11 @@ Future<void> main() async {
 
   var children = await ChildService.retrieveChildren();
 
-  await GoogleFonts.pendingFonts(
-    [
-      GoogleFonts.patrickHand(),
-      GoogleFonts.patrickHandSc(),
-      GoogleFonts.pacifico(),
-    ]);
+  await GoogleFonts.pendingFonts([
+    GoogleFonts.patrickHand(),
+    GoogleFonts.patrickHandSc(),
+    GoogleFonts.pacifico(),
+  ]);
 
   runApp(MyApp(
     children: children,
@@ -96,6 +95,9 @@ class MyApp extends StatelessWidget {
       appBarTheme: AppBarTheme(
         backgroundColor: const Color(0xFF064635),
         foregroundColor: colorScheme.onPrimary,
+      ),
+      cardTheme: CardTheme(
+        color: colorScheme.secondary,
       ),
       scaffoldBackgroundColor: const Color(0xFFF4F27E),
       textTheme: googleFontsTheme,
