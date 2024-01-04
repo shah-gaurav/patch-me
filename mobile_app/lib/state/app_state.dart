@@ -14,4 +14,25 @@ class AppState extends ChangeNotifier {
     await ChildService.storeChildren(children);
     notifyListeners();
   }
+
+  // get child from array by recordKey
+  Child? getChild(String recordKey) {
+    if (recordKey.isEmpty) {
+      return null;
+    }
+    if (children.isEmpty) {
+      return null;
+    }
+    if (children.any((child) => child.recordKey == recordKey)) {
+      return children.firstWhere((child) => child.recordKey == recordKey);
+    }
+    return null;
+  }
+
+  // delete child from array by recordKey
+  Future<void> deleteChild(String recordKey) async {
+    children.removeWhere((child) => child.recordKey == recordKey);
+    await ChildService.storeChildren(children);
+    notifyListeners();
+  }
 }

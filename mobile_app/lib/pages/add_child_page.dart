@@ -7,14 +7,14 @@ import 'package:patch_me/state/app_state.dart';
 import 'package:provider/provider.dart';
 import 'package:random_string/random_string.dart';
 
-class AddChild extends StatefulWidget {
-  const AddChild({super.key});
+class AddChildPage extends StatefulWidget {
+  const AddChildPage({super.key});
 
   @override
-  State<AddChild> createState() => _AddChildState();
+  State<AddChildPage> createState() => _AddChildPageState();
 }
 
-class _AddChildState extends State<AddChild> {
+class _AddChildPageState extends State<AddChildPage> {
   final _formKey = GlobalKey<FormBuilderState>();
 
   String _generateRandomKey() {

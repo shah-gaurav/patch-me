@@ -5,8 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:patch_me/models/child.dart';
-import 'package:patch_me/pages/add_child.dart';
-import 'package:patch_me/pages/homepage.dart';
+import 'package:patch_me/pages/add_child_page.dart';
+import 'package:patch_me/pages/child_page.dart';
+import 'package:patch_me/pages/home_page.dart';
 import 'package:patch_me/services/child_service.dart';
 import 'package:patch_me/state/app_state.dart';
 import 'package:provider/provider.dart';
@@ -42,7 +43,7 @@ Future<void> initializeFirebase() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  
+
   FlutterError.onError = (errorDetails) {
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
   };
@@ -61,7 +62,13 @@ final _router = GoRouter(
     ),
     GoRoute(
       path: '/add-child',
-      builder: (context, state) => const AddChild(),
+      builder: (context, state) => const AddChildPage(),
+    ),
+    GoRoute(
+      path: '/child/:recordKey',
+      builder: (context, state) {
+        return ChildPage(recordKey: state.pathParameters['recordKey']!);
+      },
     ),
   ],
 );
@@ -128,6 +135,15 @@ class MyApp extends StatelessWidget {
           foregroundColor: colorScheme.onPrimary,
           textStyle: googleFontsTheme.labelLarge,
         ),
+      ),
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: const Color(0xFF519259),
+        selectedItemColor: colorScheme.onPrimary,
+        unselectedItemColor: colorScheme.onPrimary.withOpacity(0.7),
+      ),
+      snackBarTheme: SnackBarThemeData(
+        backgroundColor: colorScheme.tertiary,
+        contentTextStyle: googleFontsTheme.bodyLarge,
       ),
     );
     return theme;

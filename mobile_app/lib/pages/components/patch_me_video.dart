@@ -9,6 +9,7 @@ class PatchMeVideo extends StatefulWidget {
 }
 
 class _PatchMeVideoState extends State<PatchMeVideo> {
+  var isLoading = true;
   late VideoPlayerController _controller;
   late CustomVideoPlayerController _customVideoPlayerController;
   final CustomVideoPlayerSettings _customVideoPlayerSettings =
@@ -30,7 +31,9 @@ class _PatchMeVideoState extends State<PatchMeVideo> {
     super.initState();
     _controller =
         VideoPlayerController.asset('assets/videos/patch-me-story.mov');
-    _controller.initialize().then((_) => setState(() {}));
+    _controller.initialize().then((_) => setState(() {
+          isLoading = false;
+        }));
     _customVideoPlayerController = CustomVideoPlayerController(
       context: context,
       videoPlayerController: _controller,
@@ -40,7 +43,16 @@ class _PatchMeVideoState extends State<PatchMeVideo> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomVideoPlayer(
-        customVideoPlayerController: _customVideoPlayerController);
+    if (isLoading) {
+      return const SizedBox(
+        height: 200,
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    } else {
+      return CustomVideoPlayer(
+          customVideoPlayerController: _customVideoPlayerController);
+    }
   }
 }

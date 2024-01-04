@@ -112,7 +112,7 @@ class Children extends StatelessWidget {
                 title: Text(child.name),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () {
-                  Navigator.pushNamed(context, '/child');
+                  context.push('/child/${child.recordKey}');
                 },
               ),
             );
