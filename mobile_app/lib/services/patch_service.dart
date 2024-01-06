@@ -28,6 +28,20 @@ class PatchService {
   }
 
   // get patching data by recordKey
+  static Future<Patch> getPatchingData(String recordKey) async {
+    final ref = db
+        .collection('users')
+        .withConverter<Patch>(
+          fromFirestore: (snapshot, _) => Patch.fromJson(snapshot.data()!),
+          toFirestore: (patch, _) => patch.toJson(),
+        )
+        .doc(recordKey);
+
+    final doc = await ref.get();
+    return doc.data() ?? Patch(patchTimePerDay: 120);
+  }
+
+  // get patching data stream by recordKey
   static Stream<Patch> getPatchingDataStream(String recordKey) {
     final ref = db
         .collection('users')

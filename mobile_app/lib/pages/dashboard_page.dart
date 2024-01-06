@@ -14,30 +14,17 @@ class DashboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<AppState>();
-    return StreamBuilder(
-        stream: appState.patchingData,
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return const Text('Something went wrong');
-          }
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Text('Loading');
-          }
-          if (snapshot.hasData) {
-            var patch = snapshot.data as Patch;
-            return Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  TimerWidget(patch: patch),
-                ],
-              ),
-            );
-          }
-          return const SizedBox.shrink();
-        });
+    var patch = Provider.of<Patch>(context);
+
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          TimerWidget(patch: patch),
+        ],
+      ),
+    );
   }
 }
 
@@ -94,7 +81,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator> {
   }
 
   void resetState() {
-     if (!mounted) {
+    if (!mounted) {
       timer?.cancel();
       timer = null;
       return;

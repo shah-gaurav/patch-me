@@ -9,6 +9,7 @@ class AppState extends ChangeNotifier {
   final List<Child> children;
   late String selectedChildRecordKey;
   late Child selectedChild;
+  late Patch initialPatchingData;
   late Stream<Patch> patchingData;
 
   AppState(this.children);
@@ -52,6 +53,7 @@ class AppState extends ChangeNotifier {
       }
       selectedChild = child;
       selectedChildRecordKey = child.recordKey;
+      initialPatchingData = await PatchService.getPatchingData(child.recordKey);
       patchingData = PatchService.getPatchingDataStream(child.recordKey);
       notifyListeners();
       return true;
