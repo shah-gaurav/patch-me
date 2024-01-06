@@ -6,17 +6,13 @@ import 'package:patch_me/state/app_state.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatelessWidget {
-  final String childRecordKey;
 
-  const ProfilePage({super.key, required this.childRecordKey});
+  const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<AppState>();
-    var child = appState.getChild(childRecordKey);
-    if (child == null) {
-      return const SizedBox.shrink();
-    }
+    var child = appState.selectedChild;
     return SingleChildScrollView(
       child: Card(
         margin: const EdgeInsets.all(20.0),
@@ -51,7 +47,7 @@ class ProfilePage extends StatelessWidget {
                       if (context.mounted) {
                         // show snackbar
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(                            
+                          const SnackBar(
                             content: Text(
                               'Child Profile Deleted from Device',
                             ),

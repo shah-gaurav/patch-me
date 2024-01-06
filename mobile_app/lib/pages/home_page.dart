@@ -34,14 +34,14 @@ class HomePage extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(
-                height: 20,
+                height: 10,
               ),
               if (appState.children.isEmpty)
                 const OurStory()
               else
                 Children(appState: appState),
               const SizedBox(
-                height: 20,
+                height: 10,
               ),
               ElevatedButton(
                 onPressed: () {
@@ -72,8 +72,15 @@ class OurStory extends StatelessWidget {
               'Our Story',
               style: Theme.of(context).textTheme.headlineLarge,
             ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              'Dedicated to my daughter Aamani',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 15.0),
+              padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 5.0),
               child: PatchMeVideo(),
             ),
             Text(
@@ -98,6 +105,7 @@ class Children extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var appState = context.read<AppState>();
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -111,8 +119,12 @@ class Children extends StatelessWidget {
                 leading: const Icon(Icons.child_care),
                 title: Text(child.name),
                 trailing: const Icon(Icons.arrow_forward_ios),
-                onTap: () {
-                  context.push('/child/${child.recordKey}');
+                onTap: () async {
+                  var childSelected =
+                      await appState.selectChild(child.recordKey);
+                  if (childSelected && context.mounted) {
+                    context.push('/child/${child.recordKey}');
+                  }
                 },
               ),
             );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:patch_me/pages/dashboard_page.dart';
 import 'package:patch_me/pages/profile_page.dart';
 import 'package:patch_me/state/app_state.dart';
 import 'package:provider/provider.dart';
@@ -15,24 +16,15 @@ class ChildPage extends StatefulWidget {
 
 class _ChildPageState extends State<ChildPage> {
   int currentIndex = 0;
-  late List<Widget> screens;
-
-  @override
-  void initState() {
-    super.initState();
-    screens = [
-      const Placeholder(),
-      ProfilePage(childRecordKey: widget.recordKey)
-    ];
-  }
+  late List<Widget> screens = [
+    const DashboardPage(),
+    const ProfilePage(),
+  ];
 
   @override
   Widget build(BuildContext context) {
     var appState = context.read<AppState>();
-    var child = appState.getChild(widget.recordKey);
-    if (child == null) {
-      return const SizedBox.shrink();
-    }
+    var child = appState.selectedChild;
     return Scaffold(
         appBar: AppBar(
             title: Text(child.name),
