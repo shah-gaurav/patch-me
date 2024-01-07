@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:patch_me/firebase_constants.dart';
 import 'package:patch_me/models/child.dart';
 import 'package:patch_me/models/patch.dart';
+import 'package:patch_me/services/auth_service.dart';
 import 'package:patch_me/services/child_service.dart';
 import 'package:patch_me/services/patch_service.dart';
 
@@ -46,6 +48,9 @@ class AppState extends ChangeNotifier {
   Future<bool> selectChild(String recordKey) async {
     var child = getChild(recordKey);
     if (child != null) {
+      await AuthService.signInWithEmailAndPassword(
+          email: FirebaseConstants.kFirebaseEmail,
+          password: FirebaseConstants.kFirebasePassword);
       var patchDataExists =
           await PatchService.patchingDataExists(child.recordKey);
       if (!patchDataExists) {
@@ -60,6 +65,13 @@ class AppState extends ChangeNotifier {
     } else {
       return false;
     }
+  }
+
+  // unselect selected child
+  Future<void> unselectChild() async {
+    await AuthService.signOut();
+    selectedChildRecordKey = '';
+    notifyListeners();
   }
 
   // update patching data in firestore

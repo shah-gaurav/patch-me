@@ -13,6 +13,7 @@ import 'package:patch_me/services/child_service.dart';
 import 'package:patch_me/state/app_state.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -49,6 +50,7 @@ Future<void> initializeFirebase() async {
   if (kDebugMode) {
     try {
       FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8080);
+      await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
     } catch (e) {
       // ignore: avoid_print
       print(e);

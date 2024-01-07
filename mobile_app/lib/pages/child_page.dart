@@ -36,8 +36,11 @@ class _ChildPageState extends State<ChildPage> {
               title: Text(child.name),
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back),
-                onPressed: () {
-                  context.pop();
+                onPressed: () async {
+                  await appState.unselectChild();
+                  if (context.mounted) {
+                    context.pop();
+                  }
                 },
               )),
           body: screens[currentIndex],
