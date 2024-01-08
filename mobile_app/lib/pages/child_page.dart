@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:patch_me/models/patch.dart';
-import 'package:patch_me/pages/dashboard_page.dart';
-import 'package:patch_me/pages/history_page.dart';
-import 'package:patch_me/pages/profile_page.dart';
+import 'package:patch_me/pages/child_page/dashboard_page.dart';
+import 'package:patch_me/pages/child_page/history_page.dart';
+import 'package:patch_me/pages/child_page/profile_page.dart';
 import 'package:patch_me/state/app_state.dart';
 import 'package:provider/provider.dart';
 

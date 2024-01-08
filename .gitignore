@@ -82,3 +82,4 @@ key.properties
 
 firestore.rules
 firestore.indexes.json
+emulator_data/
