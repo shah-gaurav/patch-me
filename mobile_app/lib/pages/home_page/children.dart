@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:patch_me/state/app_state.dart';
 import 'package:provider/provider.dart';
 
@@ -28,10 +29,12 @@ class Children extends StatelessWidget {
                 title: Text(child.name),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () async {
+                  context.loaderOverlay.show();
                   var childSelected =
                       await appState.selectChild(child.recordKey);
                   if (childSelected && context.mounted) {
                     context.push('/child/${child.recordKey}');
+                    context.loaderOverlay.hide();
                   }
                 },
               ),

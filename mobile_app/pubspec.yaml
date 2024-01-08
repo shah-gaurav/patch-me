@@ -25,6 +25,7 @@ dependencies:
   intl: ^0.18.1
   percent_indicator: ^4.2.3
   firebase_auth: ^4.16.0
+  loader_overlay: ^4.0.0
 
 dev_dependencies:
   flutter_test:

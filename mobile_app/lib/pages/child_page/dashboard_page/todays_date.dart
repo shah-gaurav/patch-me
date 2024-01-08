@@ -12,17 +12,17 @@ class TodaysDate extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.0),
           border: Border.all(
             color: Theme.of(context).colorScheme.primary,
-            width: 1.0,
+            width: 2.0,
           ),
         ),
         child: Text(
           DateFormat.yMMMMEEEEd().format(DateTime.now()),
-          style: Theme.of(context).textTheme.titleMedium,
+          style: Theme.of(context).textTheme.titleLarge,
         ),
       ),
     );
