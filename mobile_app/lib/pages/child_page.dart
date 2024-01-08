@@ -29,7 +29,7 @@ class _ChildPageState extends State<ChildPage> {
     var appState = context.read<AppState>();
     var child = appState.selectedChild;
     return StreamProvider<Patch>.value(
-      value: appState.patchingData,
+      value: appState.patchingDataStream,
       initialData: appState.initialPatchingData,
       child: Scaffold(
           appBar: AppBar(

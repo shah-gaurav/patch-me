@@ -12,7 +12,7 @@ class AppState extends ChangeNotifier {
   late String selectedChildRecordKey;
   late Child selectedChild;
   late Patch initialPatchingData;
-  late Stream<Patch> patchingData;
+  late Stream<Patch> patchingDataStream;
 
   AppState(this.children);
 
@@ -58,13 +58,49 @@ class AppState extends ChangeNotifier {
       }
       selectedChild = child;
       selectedChildRecordKey = child.recordKey;
-      initialPatchingData = await PatchService.getPatchingData(child.recordKey);
-      patchingData = PatchService.getPatchingDataStream(child.recordKey);
+
+      // if the timer is running, ensure that it has not been running for more than 2 times the patch time
+      initialPatchingData =
+          await getPatchingDataAndStopTimerIfUserForgot(child.recordKey);
+
+      patchingDataStream = PatchService.getPatchingDataStream(child.recordKey);
       notifyListeners();
       return true;
     } else {
       return false;
     }
+  }
+
+  Future<Patch> getPatchingDataAndStopTimerIfUserForgot(
+      String recordKey) async {
+    var patchingData = await PatchService.getPatchingData(recordKey);
+    if (patchingData.timerRunning == true) {
+      var now = DateTime.now();
+      var timerStartTime =
+          DateTime.fromMillisecondsSinceEpoch(patchingData.startTime!);
+      var timeSinceStart = now.difference(timerStartTime);
+      var maxTime = Duration(minutes: patchingData.patchTimePerDay * 2);
+      if (timeSinceStart > maxTime) {
+        patchingData.timerRunning = false;
+        patchingData.startTime = null;
+        patchingData.timeRemaining = 0;
+        var patchDataForTimerStart = patchingData.data.firstWhere(
+            (element) => DateUtils.isSameDay(element.date, timerStartTime),
+            orElse: () => PatchData(
+                  date: timerStartTime,
+                  minutes: 0,
+                  targetMinutes: patchingData.patchTimePerDay,
+                ));
+        patchDataForTimerStart.minutes = maxTime.inMinutes;
+        patchingData.data = [
+          patchDataForTimerStart,
+          ...patchingData.data.where(
+              (element) => !DateUtils.isSameDay(element.date, timerStartTime))
+        ];
+        await PatchService.updatePatchingData(recordKey, patchingData);
+      }
+    }
+    return patchingData;
   }
 
   // unselect selected child

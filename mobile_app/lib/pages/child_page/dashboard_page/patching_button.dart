@@ -36,21 +36,37 @@ class PatchingButton extends StatelessWidget {
   }
 
   startPatching(BuildContext context, Patch patch) {
-    patch.timerRunning = true;
-    patch.startTime = DateTime.now().millisecondsSinceEpoch;
-    patch.timeRemaining = patch.patchTimePerDay - patch.totalTimePatchedToday;
-    var appState = context.read<AppState>();
-    appState.updatePatchingData(appState.selectedChildRecordKey, patch);
+    if (patch.totalTimePatchedToday >= patch.patchTimePerDay * 2) {
+      // show snackbar that patching time is exceeded for today
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+              'Patching time exceeded for today. Please patch again tomorrow.'),
+          duration: Duration(seconds: 3),
+        ),
+      );
+      return;
+    } else {
+      patch.timerRunning = true;
+      patch.startTime = DateTime.now().millisecondsSinceEpoch;
+      patch.timeRemaining = patch.patchTimePerDay - patch.totalTimePatchedToday;
+      var appState = context.read<AppState>();
+      appState.updatePatchingData(appState.selectedChildRecordKey, patch);
+    }
   }
 
   stopPatching(BuildContext context, Patch patch) async {
     var appState = context.read<AppState>();
     var patchDataForToday = patch.patchDataForToday;
-    patchDataForToday.minutes = patch.totalTimePatchedToday;
+    patchDataForToday.minutes =
+        patch.totalTimePatchedToday > patch.patchTimePerDay * 2
+            ? patch.patchTimePerDay * 2
+            : patch.totalTimePatchedToday;
 
     patch.timerRunning = false;
     patch.startTime = null;
     patch.timeRemaining = patch.patchTimePerDay - patch.totalTimePatchedToday;
+    if (patch.timeRemaining! < 0) patch.timeRemaining = 0;
     patch.data = [
       patchDataForToday,
       ...patch.data.where(
