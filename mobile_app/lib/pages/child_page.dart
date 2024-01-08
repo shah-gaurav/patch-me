@@ -26,14 +26,13 @@ class _ChildPageState extends State<ChildPage> {
 
   @override
   Widget build(BuildContext context) {
-    var appState = context.read<AppState>();
-    var child = appState.selectedChild;
+    var appState = context.watch<AppState>();
     return StreamProvider<Patch>.value(
       value: appState.patchingDataStream,
       initialData: appState.initialPatchingData,
       child: Scaffold(
           appBar: AppBar(
-              title: Text(child.name),
+              title: Text(appState.selectedChild.name),
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () async {

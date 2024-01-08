@@ -23,6 +23,14 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  // update a child in the array
+  Future<void> updateChild(Child child) async {
+    children.removeWhere((element) => element.recordKey == child.recordKey);
+    children.add(child);
+    await ChildService.storeChildren(children);
+    notifyListeners();
+  }
+
   // get child from array by recordKey
   Child? getChild(String recordKey) {
     if (recordKey.isEmpty) {

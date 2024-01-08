@@ -1,12 +1,14 @@
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:patch_me/models/child.dart';
 import 'package:patch_me/state/app_state.dart';
 import 'package:provider/provider.dart';
 
-class ProfilePage extends StatelessWidget {
+import 'profile_page/child_name_display.dart';
+import 'profile_page/patch_time_display.dart';
+import 'profile_page/record_key_display.dart';
 
+class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
   @override
@@ -22,17 +24,15 @@ class ProfilePage extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  'Profile for ${child.name}',
+                  'Profile Information',
                   style: Theme.of(context).textTheme.displaySmall,
                 ),
-                RecordKeyDisplay(child: child),
+                ChildNameDisplay(child: child),
                 const SizedBox(
                   height: 20,
                 ),
-                Text(
-                  'Patching Time (per day): ${child.patchTime} minutes',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
+                RecordKeyDisplay(child: child),
+                PatchTimeDisplay(child: child),
                 const SizedBox(
                   height: 20,
                 ),
@@ -100,42 +100,5 @@ class ProfilePage extends StatelessWidget {
       },
     );
     return result;
-  }
-}
-
-class RecordKeyDisplay extends StatelessWidget {
-  const RecordKeyDisplay({
-    super.key,
-    required this.child,
-  });
-
-  final Child child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          child.recordKey,
-        ),
-        IconButton(
-          icon: const Icon(Icons.copy),
-          iconSize: 16,
-          onPressed: () {
-            Clipboard.setData(
-              ClipboardData(text: child.recordKey),
-            );
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text(
-                  'Record Key copied to clipboard',
-                ),
-              ),
-            );
-          },
-        ),
-      ],
-    );
   }
 }
