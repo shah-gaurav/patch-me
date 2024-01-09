@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -46,6 +47,8 @@ Future<void> initializeFirebase() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
+
   // use local emulator if in debug mode
   if (kDebugMode) {
     try {
@@ -68,6 +71,7 @@ Future<void> initializeFirebase() async {
 }
 
 final _router = GoRouter(
+  observers: [FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance)],
   routes: [
     GoRoute(
       path: '/',
