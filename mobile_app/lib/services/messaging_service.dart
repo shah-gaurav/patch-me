@@ -7,7 +7,15 @@ class MessagingService {
   // function to initialize notifications
   static Future<void> initializeNotifications(Function callback) async {
     // request permission to send notifications
-    await _firebaseMessaging.requestPermission();
+    await _firebaseMessaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       callback();
