@@ -11,6 +11,7 @@ import 'package:patch_me/pages/add_child_page.dart';
 import 'package:patch_me/pages/child_page.dart';
 import 'package:patch_me/pages/home_page.dart';
 import 'package:patch_me/services/child_service.dart';
+import 'package:patch_me/services/messaging_service.dart';
 import 'package:patch_me/state/app_state.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -68,6 +69,26 @@ Future<void> initializeFirebase() async {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
+
+  // listen for firebase messaging notifications and show a dialog if the app is in the foreground
+  MessagingService.initializeNotifications(pushNotificationAlert);
+}
+
+pushNotificationAlert() async {
+  showDialog(
+    context: _router.routerDelegate.navigatorKey.currentContext!,
+    builder: (context) => AlertDialog(
+      title: const Text('Patching almost complete'),
+      content: const Text(
+          'Please make sure to take off the patch and stop the timer.'),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('OK'),
+        ),
+      ],
+    ),
+  );
 }
 
 final _router = GoRouter(

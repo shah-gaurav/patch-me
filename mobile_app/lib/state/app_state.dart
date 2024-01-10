@@ -4,6 +4,7 @@ import 'package:patch_me/models/child.dart';
 import 'package:patch_me/models/patch.dart';
 import 'package:patch_me/services/auth_service.dart';
 import 'package:patch_me/services/child_service.dart';
+import 'package:patch_me/services/messaging_service.dart';
 import 'package:patch_me/services/patch_service.dart';
 
 class AppState extends ChangeNotifier {
@@ -71,11 +72,28 @@ class AppState extends ChangeNotifier {
       initialPatchingData =
           await getPatchingDataAndStopTimerIfUserForgot(child.recordKey);
 
+      // Get firebase messaging token and store it
+      await getAndStoreMessagingToken(child);
+
       patchingDataStream = PatchService.getPatchingDataStream(child.recordKey);
       notifyListeners();
       return true;
     } else {
       return false;
+    }
+  }
+
+  Future<void> getAndStoreMessagingToken(Child child) async {
+    var token = await MessagingService.getToken();
+    if (token != null) {
+      // check if initialPatchingData.tokens list has a token
+      if (!initialPatchingData.tokens.contains(token)) {
+        // add token to initialPatchingData.tokens list
+        initialPatchingData.tokens.add(token);
+        // update patching data in firestore
+        await PatchService.updatePatchingData(
+            child.recordKey, initialPatchingData);
+      }
     }
   }
 
