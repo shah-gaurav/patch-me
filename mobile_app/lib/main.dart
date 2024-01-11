@@ -127,6 +127,7 @@ class MyApp extends StatelessWidget {
         title: 'Patch Me',
         theme: theme,
         routerConfig: _router,
+        debugShowCheckedModeBanner: false,
       ),
     );
   }
