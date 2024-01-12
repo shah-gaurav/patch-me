@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +10,7 @@ import 'package:patch_me/pages/add_child_page.dart';
 import 'package:patch_me/pages/child_page.dart';
 import 'package:patch_me/pages/home_page.dart';
 import 'package:patch_me/services/child_service.dart';
+import 'package:patch_me/services/messaging_service.dart';
 import 'package:patch_me/state/app_state.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -45,15 +46,18 @@ Future<void> initializeFirebase() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
+
   // use local emulator if in debug mode
-  if (kDebugMode) {
-    try {
-      FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8080);
-    } catch (e) {
-      // ignore: avoid_print
-      print(e);
-    }
-  }
+  // if (kDebugMode) {
+  //   try {
+  //     FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8080);
+  //     await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+  //   } catch (e) {
+  //     // ignore: avoid_print
+  //     print(e);
+  //   }
+  // }
 
   FlutterError.onError = (errorDetails) {
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
@@ -63,9 +67,30 @@ Future<void> initializeFirebase() async {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
+
+  // listen for firebase messaging notifications and show a dialog if the app is in the foreground
+  MessagingService.initializeNotifications(pushNotificationAlert);
+}
+
+pushNotificationAlert() async {
+  showDialog(
+    context: _router.routerDelegate.navigatorKey.currentContext!,
+    builder: (context) => AlertDialog(
+      title: const Text('Patching almost complete'),
+      content: const Text(
+          'Please make sure to take off the patch and stop the timer.'),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('OK'),
+        ),
+      ],
+    ),
+  );
 }
 
 final _router = GoRouter(
+  observers: [FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance)],
   routes: [
     GoRoute(
       path: '/',
@@ -102,6 +127,7 @@ class MyApp extends StatelessWidget {
         title: 'Patch Me',
         theme: theme,
         routerConfig: _router,
+        debugShowCheckedModeBanner: false,
       ),
     );
   }

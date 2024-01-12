@@ -80,3 +80,6 @@ firebase_constants.dart
 key.properties
 
 
+firestore.rules
+firestore.indexes.json
+emulator_data/

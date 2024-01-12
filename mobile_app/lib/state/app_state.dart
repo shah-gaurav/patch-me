@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:patch_me/firebase_constants.dart';
 import 'package:patch_me/models/child.dart';
 import 'package:patch_me/models/patch.dart';
+import 'package:patch_me/services/auth_service.dart';
 import 'package:patch_me/services/child_service.dart';
+import 'package:patch_me/services/messaging_service.dart';
 import 'package:patch_me/services/patch_service.dart';
 
 class AppState extends ChangeNotifier {
@@ -10,12 +13,20 @@ class AppState extends ChangeNotifier {
   late String selectedChildRecordKey;
   late Child selectedChild;
   late Patch initialPatchingData;
-  late Stream<Patch> patchingData;
+  late Stream<Patch> patchingDataStream;
 
   AppState(this.children);
 
   // add a child to the array
   Future<void> addChild(Child child) async {
+    children.add(child);
+    await ChildService.storeChildren(children);
+    notifyListeners();
+  }
+
+  // update a child in the array
+  Future<void> updateChild(Child child) async {
+    children.removeWhere((element) => element.recordKey == child.recordKey);
     children.add(child);
     await ChildService.storeChildren(children);
     notifyListeners();
@@ -46,6 +57,9 @@ class AppState extends ChangeNotifier {
   Future<bool> selectChild(String recordKey) async {
     var child = getChild(recordKey);
     if (child != null) {
+      await AuthService.signInWithEmailAndPassword(
+          email: FirebaseConstants.kFirebaseEmail,
+          password: FirebaseConstants.kFirebasePassword);
       var patchDataExists =
           await PatchService.patchingDataExists(child.recordKey);
       if (!patchDataExists) {
@@ -53,13 +67,73 @@ class AppState extends ChangeNotifier {
       }
       selectedChild = child;
       selectedChildRecordKey = child.recordKey;
-      initialPatchingData = await PatchService.getPatchingData(child.recordKey);
-      patchingData = PatchService.getPatchingDataStream(child.recordKey);
+
+      // if the timer is running, ensure that it has not been running for more than 2 times the patch time
+      initialPatchingData =
+          await getPatchingDataAndStopTimerIfUserForgot(child.recordKey);
+
+      // Get firebase messaging token and store it
+      await getAndStoreMessagingToken(child);
+
+      patchingDataStream = PatchService.getPatchingDataStream(child.recordKey);
       notifyListeners();
       return true;
     } else {
       return false;
     }
+  }
+
+  Future<void> getAndStoreMessagingToken(Child child) async {
+    var token = await MessagingService.getToken();
+    if (token != null) {
+      // check if initialPatchingData.tokens list has a token
+      if (!initialPatchingData.tokens.contains(token)) {
+        // add token to initialPatchingData.tokens list
+        initialPatchingData.tokens.add(token);
+        // update patching data in firestore
+        await PatchService.updatePatchingData(
+            child.recordKey, initialPatchingData);
+      }
+    }
+  }
+
+  Future<Patch> getPatchingDataAndStopTimerIfUserForgot(
+      String recordKey) async {
+    var patchingData = await PatchService.getPatchingData(recordKey);
+    if (patchingData.timerRunning == true) {
+      var now = DateTime.now();
+      var timerStartTime =
+          DateTime.fromMillisecondsSinceEpoch(patchingData.startTime!);
+      var timeSinceStart = now.difference(timerStartTime);
+      var maxTime = Duration(minutes: patchingData.patchTimePerDay * 2);
+      if (timeSinceStart > maxTime) {
+        patchingData.timerRunning = false;
+        patchingData.startTime = null;
+        patchingData.timeRemaining = 0;
+        var patchDataForTimerStart = patchingData.data.firstWhere(
+            (element) => DateUtils.isSameDay(element.date, timerStartTime),
+            orElse: () => PatchData(
+                  date: timerStartTime,
+                  minutes: 0,
+                  targetMinutes: patchingData.patchTimePerDay,
+                ));
+        patchDataForTimerStart.minutes = maxTime.inMinutes;
+        patchingData.data = [
+          patchDataForTimerStart,
+          ...patchingData.data.where(
+              (element) => !DateUtils.isSameDay(element.date, timerStartTime))
+        ];
+        await PatchService.updatePatchingData(recordKey, patchingData);
+      }
+    }
+    return patchingData;
+  }
+
+  // unselect selected child
+  Future<void> unselectChild() async {
+    await AuthService.signOut();
+    selectedChildRecordKey = '';
+    notifyListeners();
   }
 
   // update patching data in firestore
