@@ -1,8 +1,6 @@
 // Stateless widget that displays patching data
 
 import 'package:flutter/material.dart';
-import 'package:patch_me/models/patch.dart';
-import 'package:provider/provider.dart';
 
 import 'dashboard_page/timer_widget.dart';
 
