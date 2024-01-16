@@ -1,7 +1,7 @@
 name: patch_me
 description: 'Patch Me is an Open Source FREE App that allows parents to track the eye patching time for their children'
 publish_to: 'none'
-version: 2.0.0+15
+version: 2.1.0+16
 
 environment:
   sdk: '>=3.2.3 <4.0.0'
@@ -29,6 +29,7 @@ dependencies:
   firebase_analytics: ^10.8.0
   firebase_messaging: ^14.7.10
   cupertino_icons: ^1.0.6
+  url_launcher: ^6.2.3
 
 dev_dependencies:
   flutter_test:

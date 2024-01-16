@@ -1,8 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:patch_me/models/child.dart';
 import 'package:patch_me/state/app_state.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'profile_page/child_name_display.dart';
 import 'profile_page/patch_time_display.dart';
@@ -36,7 +37,12 @@ class ProfilePage extends StatelessWidget {
                 const SizedBox(
                   height: 20,
                 ),
-                ElevatedButton(
+                GenerateReportButton(child: child),
+                const SizedBox(
+                  width: 10,
+                ),
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.delete),
                   onPressed: () async {
                     // ask user for confirmation
                     bool? result = await deleteConfirmation(context);
@@ -61,7 +67,7 @@ class ProfilePage extends StatelessWidget {
                         backgroundColor:
                             MaterialStateProperty.all<Color>(Colors.red),
                       ),
-                  child: const Text('Delete'),
+                  label: const Text('Delete'),
                 ),
               ],
             ),
@@ -100,5 +106,39 @@ class ProfilePage extends StatelessWidget {
       },
     );
     return result;
+  }
+}
+
+class GenerateReportButton extends StatelessWidget {
+  const GenerateReportButton({
+    super.key,
+    required this.child,
+  });
+
+  final Child child;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton.icon(
+        icon: const Icon(Icons.bar_chart),
+        onPressed: () async {
+          final url =
+              Uri.parse('https://patchme.app/report?id=${child.recordKey}');
+          if (await canLaunchUrl(url)) {
+            await launchUrl(url);
+          } else {
+            // show snackbar with error
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'Could not launch URL $url in the browser',
+                  ),
+                ),
+              );
+            }
+          }
+        },
+        label: const Text('Generate Report'));
   }
 }
