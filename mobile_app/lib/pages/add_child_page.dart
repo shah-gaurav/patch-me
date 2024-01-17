@@ -64,9 +64,9 @@ class _AddChildPageState extends State<AddChildPage> {
                               labelText: 'Patch Time (minutes per day)'),
                           validator: FormBuilderValidators.compose([
                             FormBuilderValidators.required(),
-                            FormBuilderValidators.numeric(),
                             FormBuilderValidators.min(0),
                             FormBuilderValidators.max(1440),
+                            FormBuilderValidators.integer()
                           ]),
                           keyboardType: const TextInputType.numberWithOptions(
                             decimal: false,
